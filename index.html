@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AutoGear — Premium Vehicle Accessories</title>
+<meta name="description" content="Shop premium vehicle accessories at AutoGear: interior, exterior, lighting, electronics & more. Free shipping over $99.">
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="header"></div>
+
+<!-- HERO CAROUSEL -->
+<section class="hero">
+  <div class="slides" id="slides">
+    <div class="slide active" style="background-image:url('images/hero1.jpg')">
+      <div class="slide-content">
+        <div class="container">
+          <div class="eyebrow">New 2026 Collection</div>
+          <h1>Upgrade Your Ride. Own The Road.</h1>
+          <p>Premium accessories engineered for performance, designed for the driver who demands more.</p>
+          <a href="shop.html" class="btn btn-primary">Shop Now →</a>
+        </div>
+      </div>
+    </div>
+    <div class="slide" style="background-image:url('images/hero2.jpg')">
+      <div class="slide-content">
+        <div class="container">
+          <div class="eyebrow">Interior Comfort</div>
+          <h1>Luxury Cabin Essentials</h1>
+          <p>From hand-stitched leather covers to smart infotainment — make every drive a first-class experience.</p>
+          <a href="shop.html?cat=Interior" class="btn btn-primary">Explore Interior →</a>
+        </div>
+      </div>
+    </div>
+    <div class="slide" style="background-image:url('images/hero3.jpg')">
+      <div class="slide-content">
+        <div class="container">
+          <div class="eyebrow">Performance Tuned</div>
+          <h1>Built to Push Boundaries.</h1>
+          <p>Forged alloys, aerodynamic upgrades and track-grade gear — for the road less traveled.</p>
+          <a href="shop.html?cat=Wheels" class="btn btn-primary">Performance Parts →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="hero-arrow prev" onclick="slidePrev()">‹</button>
+  <button class="hero-arrow next" onclick="slideNext()">›</button>
+  <div class="dots" id="dots"></div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="block">
+  <div class="container">
+    <div class="section-head">
+      <div><h2>Shop by Category</h2><p>Find exactly what your vehicle needs — curated by experts.</p></div>
+      <a href="shop.html">View all →</a>
+    </div>
+    <div class="cats" id="cats"></div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="block" style="padding-top:0">
+  <div class="container">
+    <div class="section-head">
+      <div><h2>Featured Products</h2><p>Best-selling gear loved by thousands of drivers.</p></div>
+      <a href="shop.html">View all →</a>
+    </div>
+    <div class="grid" id="featured"></div>
+  </div>
+</section>
+
+<!-- PROMO -->
+<section class="block" style="padding-top:0">
+  <div class="container">
+    <div class="promo">
+      <div>
+        <h2>Built by drivers,<br>for drivers.</h2>
+        <p>Every product is road-tested in real conditions before it ships. We don't sell anything we wouldn't put on our own ride.</p>
+        <a href="shop.html" class="btn btn-primary">Discover the Story</a>
+      </div>
+      <div class="promo-stats">
+        <div class="stat"><b>50K+</b><span>Happy Drivers</span></div>
+        <div class="stat"><b>800+</b><span>Products</span></div>
+        <div class="stat"><b>4.8★</b><span>Avg Rating</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW ARRIVALS CAROUSEL -->
+<section class="block" style="padding-top:0">
+  <div class="container">
+    <div class="section-head">
+      <div><h2>New Arrivals</h2><p>Fresh drops, just in.</p></div>
+      <a href="shop.html">View all →</a>
+    </div>
+    <div class="carousel">
+      <button class="car-btn prev" onclick="carScroll(-1)">‹</button>
+      <div class="carousel-track" id="carTrack"></div>
+      <button class="car-btn next" onclick="carScroll(1)">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="block" style="padding-top:0">
+  <div class="container">
+    <div class="features">
+      <div class="feat"><div class="ico">🚚</div><h4>Free Shipping</h4><p>On orders over $99</p></div>
+      <div class="feat"><div class="ico">🔒</div><h4>Secure Checkout</h4><p>256-bit SSL encryption</p></div>
+      <div class="feat"><div class="ico">↩️</div><h4>30-Day Returns</h4><p>Hassle-free returns</p></div>
+      <div class="feat"><div class="ico">🛠️</div><h4>Expert Support</h4><p>7 days a week</p></div>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome("home");
+
+// Render categories
+document.getElementById("cats").innerHTML = CATEGORIES.map(c=>`
+  <a href="shop.html?cat=${c.name}" class="cat">
+    <div class="ico">${c.icon}</div>
+    <h3>${c.name}</h3><span>${c.count} products</span>
+  </a>`).join("");
+
+// Featured
+document.getElementById("featured").innerHTML = PRODUCTS.slice(0,4).map(productCard).join("");
+// Carousel
+document.getElementById("carTrack").innerHTML = PRODUCTS.slice().reverse().map(productCard).join("");
+
+// Hero slider
+let slideIdx = 0;
+const slides = document.querySelectorAll(".slide");
+const dotsEl = document.getElementById("dots");
+slides.forEach((_,i)=>{
+  const d=document.createElement("div");
+  d.className="dot"+(i===0?" active":"");
+  d.onclick=()=>goSlide(i);
+  dotsEl.appendChild(d);
+});
+function goSlide(i){
+  slides[slideIdx].classList.remove("active");
+  dotsEl.children[slideIdx].classList.remove("active");
+  slideIdx=(i+slides.length)%slides.length;
+  slides[slideIdx].classList.add("active");
+  dotsEl.children[slideIdx].classList.add("active");
+}
+function slideNext(){goSlide(slideIdx+1)}
+function slidePrev(){goSlide(slideIdx-1)}
+let autoSlide = setInterval(slideNext,5500);
+document.querySelector(".hero").addEventListener("mouseenter",()=>clearInterval(autoSlide));
+document.querySelector(".hero").addEventListener("mouseleave",()=>autoSlide=setInterval(slideNext,5500));
+
+function carScroll(dir){
+  document.getElementById("carTrack").scrollBy({left:dir*320, behavior:"smooth"});
+}
+</script>
+</body>
+</html>

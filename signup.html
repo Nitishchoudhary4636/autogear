@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Create Account — AutoGear</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="header"></div>
+<div class="auth-wrap">
+  <div class="auth">
+    <h1>Create your account</h1>
+    <p class="sub">Join 50,000+ drivers powered by AutoGear.</p>
+    <div class="alert err" id="err"></div>
+    <form id="form">
+      <div class="field"><label>Full Name</label><input type="text" id="name" required></div>
+      <div class="field"><label>Email</label><input type="email" id="email" required></div>
+      <div class="field"><label>Password (min 6 chars)</label><input type="password" id="pwd" minlength="6" required></div>
+      <div class="field"><label>Confirm Password</label><input type="password" id="cpwd" minlength="6" required></div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+    <p class="alt">Already have an account? <a href="login.html">Sign in</a></p>
+  </div>
+</div>
+<div id="footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome();
+document.getElementById("form").onsubmit = e=>{
+  e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const pwd = document.getElementById("pwd").value;
+  const cpwd = document.getElementById("cpwd").value;
+  const err = document.getElementById("err");
+  err.classList.remove("show");
+  if(pwd !== cpwd){ err.textContent="Passwords do not match."; err.classList.add("show"); return; }
+  const users = getUsers();
+  if(users.find(u=>u.email===email)){ err.textContent="An account with this email already exists."; err.classList.add("show"); return; }
+  users.push({name,email,password:pwd, createdAt:Date.now()});
+  saveUsers(users);
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify({name,email}));
+  toast("Account created! Welcome to AutoGear 🚗");
+  setTimeout(()=>location.href="index.html", 900);
+};
+</script>
+</body>
+</html>

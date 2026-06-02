@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shopping Cart — AutoGear</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="header"></div>
+<div class="container cart-wrap">
+  <h1>Shopping Cart</h1>
+  <div id="cartBody"></div>
+</div>
+<div id="footer"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome();
+
+function render(){
+  const cart = getCart();
+  if(!cart.length){
+    document.getElementById("cartBody").innerHTML = `
+      <div class="empty"><div class="ico">🛒</div><h3>Your cart is empty</h3>
+      <p>Start adding some quality gear to your cart.</p>
+      <a href="shop.html" class="btn btn-primary">Start Shopping</a></div>`;
+    return;
+  }
+  const items = cart.map(ci=>{
+    const p = PRODUCTS.find(x=>x.id===ci.id);
+    return {...p, qty:ci.qty};
+  });
+  const sub = items.reduce((s,i)=>s+i.price*i.qty,0);
+  const ship = sub>99?0:9.99;
+  const tax = sub*0.08;
+  const total = sub+ship+tax;
+
+  document.getElementById("cartBody").innerHTML = `
+    <div class="cart-grid">
+      <div class="cart-items">
+        ${items.map(i=>`
+          <div class="cart-item">
+            <img src="${i.img}" alt="${i.name}">
+            <div class="info">
+              <h4>${i.name}</h4>
+              <span style="color:var(--muted);font-size:13px">${i.category}</span>
+              <div class="p">$${i.price.toFixed(2)}</div>
+              <div class="qty" style="margin-top:8px">
+                <button onclick="updateCartQty(${i.id},${i.qty-1});render()">−</button>
+                <input value="${i.qty}" readonly>
+                <button onclick="updateCartQty(${i.id},${i.qty+1});render()">+</button>
+              </div>
+            </div>
+            <button class="rm" onclick="removeFromCart(${i.id});render()" title="Remove">✕</button>
+          </div>`).join("")}
+      </div>
+      <div class="summary">
+        <h3>Order Summary</h3>
+        <div class="line"><span>Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} items)</span><span>$${sub.toFixed(2)}</span></div>
+        <div class="line"><span>Shipping</span><span>${ship===0?"FREE":"$"+ship.toFixed(2)}</span></div>
+        <div class="line"><span>Tax (8%)</span><span>$${tax.toFixed(2)}</span></div>
+        <div class="total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+        <button class="btn btn-primary btn-block" style="margin-top:18px" onclick="checkout()">Proceed to Checkout</button>
+        <a href="shop.html" class="btn btn-ghost btn-block" style="margin-top:10px">Continue Shopping</a>
+      </div>
+    </div>`;
+}
+
+function checkout(){
+  if(!currentUser()){
+    toast("Please login to checkout");
+    setTimeout(()=>location.href="login.html",900);
+    return;
+  }
+  toast("Order placed! 🎉 (demo)");
+  setTimeout(()=>{ localStorage.removeItem("ag_cart"); render(); updateBadges(); }, 1200);
+}
+render();
+</script>
+</body>
+</html>

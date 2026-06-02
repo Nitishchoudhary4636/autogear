@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact Us — AutoGear</title>
+<meta name="description" content="Get in touch with AutoGear. Our team is ready to help with orders, installs and product advice.">
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="header"></div>
+
+<div class="page-head">
+  <div class="container">
+    <h1>Get In Touch</h1>
+    <p>Questions, custom orders, install advice — we're here for it.</p>
+  </div>
+</div>
+
+<div class="container contact-wrap">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="block">
+        <div class="ico">📍</div>
+        <div><h4>Headquarters</h4><p>1245 Speedway Drive<br>Detroit, MI 48226, USA</p></div>
+      </div>
+      <div class="block">
+        <div class="ico">📞</div>
+        <div><h4>Phone</h4><p>+1 (800) 555-GEAR<br>Mon-Sat · 9AM - 7PM EST</p></div>
+      </div>
+      <div class="block">
+        <div class="ico">✉️</div>
+        <div><h4>Email</h4><p>support@autogear.com<br>sales@autogear.com</p></div>
+      </div>
+      <div class="block">
+        <div class="ico">💬</div>
+        <div><h4>Live Chat</h4><p>Available 24/7 via our chat widget. Average response: 2 minutes.</p></div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h3 style="margin-bottom:6px;font-size:22px">Send us a message</h3>
+      <p style="color:var(--muted);margin-bottom:22px;font-size:14px">We'll get back to you within 24 hours.</p>
+      <div class="alert ok" id="ok">Thanks! Your message has been sent.</div>
+      <form id="cform">
+        <div class="field"><label>Name</label><input type="text" required></div>
+        <div class="field"><label>Email</label><input type="email" required></div>
+        <div class="field"><label>Subject</label><input type="text" required></div>
+        <div class="field"><label>Message</label><textarea required></textarea></div>
+        <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome("contact");
+document.getElementById("cform").onsubmit = e=>{
+  e.preventDefault();
+  document.getElementById("ok").classList.add("show");
+  e.target.reset();
+  toast("Message sent successfully");
+  setTimeout(()=>document.getElementById("ok").classList.remove("show"), 5000);
+};
+</script>
+</body>
+</html>

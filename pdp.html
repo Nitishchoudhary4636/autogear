@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product — AutoGear</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container">
+  <div class="pdp" id="pdp"></div>
+
+  <section class="block">
+    <div class="section-head"><div><h2>You may also like</h2></div></div>
+    <div class="grid" id="related"></div>
+  </section>
+</div>
+
+<div id="footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome("shop");
+
+const id = parseInt(new URLSearchParams(location.search).get("id")) || 1;
+const p = PRODUCTS.find(x=>x.id===id) || PRODUCTS[0];
+document.title = p.name + " — AutoGear";
+
+const stars = "★".repeat(Math.round(p.rating)) + "☆".repeat(5-Math.round(p.rating));
+const wishActive = getWish().includes(p.id) ? "active":"";
+
+document.getElementById("pdp").innerHTML = `
+  <div>
+    <div class="pdp-img"><img src="${p.img}" alt="${p.name}"></div>
+    <div class="thumbs">
+      <div><img src="${p.img}"></div>
+      <div><img src="${p.img}" style="filter:hue-rotate(20deg)"></div>
+      <div><img src="${p.img}" style="filter:brightness(0.85)"></div>
+      <div><img src="${p.img}" style="filter:contrast(1.2)"></div>
+    </div>
+  </div>
+  <div>
+    <div class="crumbs"><a href="index.html">Home</a> / <a href="shop.html?cat=${p.category}">${p.category}</a></div>
+    <h1>${p.name}</h1>
+    <div class="rating" style="font-size:15px">${stars}<span>(${p.reviews} reviews)</span></div>
+    <div class="price">$${p.price.toFixed(2)} ${p.old?`<del style="font-size:18px;color:var(--muted)">$${p.old.toFixed(2)}</del>`:""}</div>
+    <p class="desc">${p.desc}</p>
+    <div class="pdp-actions">
+      <div class="qty">
+        <button onclick="adjQty(-1)">−</button>
+        <input id="qty" value="1" readonly>
+        <button onclick="adjQty(1)">+</button>
+      </div>
+      <button class="btn btn-primary" onclick="addToCart(${p.id}, parseInt(document.getElementById('qty').value))">Add to Cart</button>
+      <button class="btn btn-ghost ${wishActive}" id="wishBtn" onclick="toggleWish(${p.id});this.classList.toggle('active')">♥ Wishlist</button>
+    </div>
+    <div class="specs">
+      <h3 style="margin-bottom:14px;font-size:18px">Specifications</h3>
+      <table><tbody>
+        ${Object.entries(p.specs).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
+      </tbody></table>
+    </div>
+  </div>
+`;
+function adjQty(d){
+  const q = document.getElementById("qty");
+  q.value = Math.max(1, parseInt(q.value)+d);
+}
+
+// Related
+document.getElementById("related").innerHTML = PRODUCTS.filter(x=>x.id!==p.id).slice(0,4).map(productCard).join("");
+</script>
+</body>
+</html>
