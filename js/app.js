@@ -272,3 +272,69 @@ function updateBadges(){
   const cartBadge = document.getElementById("cartCount");
   if(cartBadge) cartBadge.textContent = cartCount;
 }
+
+// ============ HERO CAROUSEL ============
+(function(){
+  function initHeroCarousel(){
+    const slides = document.querySelectorAll('.hero .slide');
+    const dotsContainer = document.getElementById('dots');
+    const hero = document.querySelector('.hero');
+    if(!slides || slides.length === 0) return;
+
+    let current = 0;
+    let timer = null;
+    const interval = 6000;
+
+    // build dots
+    dotsContainer.innerHTML = '';
+    slides.forEach((s, i) => {
+      const d = document.createElement('button');
+      d.className = 'dot' + (i===0? ' active' : '');
+      d.setAttribute('aria-label', `Go to slide ${i+1}`);
+      d.dataset.index = i;
+      d.addEventListener('click', function(){ goTo(parseInt(this.dataset.index,10)); });
+      dotsContainer.appendChild(d);
+    });
+
+    function update(){
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      const dots = dotsContainer.querySelectorAll('.dot');
+      dots.forEach((d,i) => d.classList.toggle('active', i === current));
+    }
+
+    function goTo(i){
+      current = (i + slides.length) % slides.length;
+      update();
+      restart();
+    }
+
+    function next(){ goTo(current + 1); }
+    function prev(){ goTo(current - 1); }
+
+    function start(){ if(timer) clearInterval(timer); timer = setInterval(next, interval); }
+    function stop(){ if(timer) clearInterval(timer); timer = null; }
+    function restart(){ stop(); start(); }
+
+    // expose controls for inline onclick handlers
+    window.slideNext = next;
+    window.slidePrev = prev;
+
+    // pause on hover
+    if(hero){
+      hero.addEventListener('mouseenter', stop);
+      hero.addEventListener('mouseleave', start);
+    }
+
+    // keyboard support
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowRight') next();
+      if(e.key === 'ArrowLeft') prev();
+    });
+
+    // start autoplay
+    start();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initHeroCarousel);
+  else initHeroCarousel();
+})();

@@ -11,39 +11,233 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-<div id="header"></div>
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  <span>Get up to 30% off site-wide</span>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="container">
+      <div class="header-wrapper">
+        <!-- LOGO -->
+        <div class="header-logo">
+          <a href="index.html" class="logo-link">
+            <span class="logo-text">Auto<b>Gear</b></span>
+          </a>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="header-search">
+          <input type="text" placeholder="Search for products..." class="search-input" id="headerSearch">
+          <button class="search-btn">🔍</button>
+        </div>
+
+        <!-- HEADER ICONS -->
+        <div class="header-icons">
+          <a href="wishlist.html" class="icon-btn" title="Wishlist">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </a>
+          <a href="cart.html" class="icon-btn" title="Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="badge" id="cartCount">0</span>
+          </a>
+          <a href="login.html" class="icon-btn" title="Account">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </a>
+          <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEGA MENU NAVIGATION -->
+  <nav class="mega-nav">
+    <div class="container">
+      <ul class="nav-menu" id="navMenu">
+        <li class="nav-item has-submenu">
+          <a href="shop.html" class="nav-link">Merchandise</a>
+          <div class="mega-menu">
+            <div class="mega-content">
+              <div class="mega-column">
+                <h4>Helmets</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Helmets&type=Full">Full Face Helmet</a></li>
+                  <li><a href="shop.html?cat=Helmets&type=Half">Half Face Helmet</a></li>
+                  <li><a href="shop.html?cat=Helmets&type=Modular">Modular Helmets</a></li>
+                  <li><a href="shop.html?cat=Helmets&type=Kids">Kids Helmets</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4>Riding Gear</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Gear&type=Jacket">Riding Jacket</a></li>
+                  <li><a href="shop.html?cat=Gear&type=Shoes">Riding Shoes</a></li>
+                  <li><a href="shop.html?cat=Gear&type=Gloves">Riding Gloves</a></li>
+                  <li><a href="shop.html?cat=Gear&type=Armor">Body Armor</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4>Urban Wear</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Urban&type=Shirts">T-Shirts</a></li>
+                  <li><a href="shop.html?cat=Urban&type=Caps">Caps</a></li>
+                  <li><a href="shop.html?cat=Urban&type=Bags">Bags</a></li>
+                  <li><a href="shop.html?cat=Urban&type=Sweatshirt">Sweatshirts</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item has-submenu">
+          <a href="shop.html" class="nav-link">Accessories</a>
+          <div class="mega-menu">
+            <div class="mega-content">
+              <div class="mega-column">
+                <h4>Protection & Security</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Security&type=Lock">Helmet Lock</a></li>
+                  <li><a href="shop.html?cat=Security&type=Guard">Crash Guard</a></li>
+                  <li><a href="shop.html?cat=Security&type=Lock">Disc Brake Lock</a></li>
+                  <li><a href="shop.html?cat=Security&type=Shield">Pro Shield</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4>Style</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Style&type=Tank">Tank Pad</a></li>
+                  <li><a href="shop.html?cat=Style&type=Visor">Visor</a></li>
+                  <li><a href="shop.html?cat=Style&type=Mirror">Mirror</a></li>
+                  <li><a href="shop.html?cat=Style&type=Cover">Seat Cover</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4>Utility</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Utility&type=Stand">Side Stand</a></li>
+                  <li><a href="shop.html?cat=Utility&type=Charger">Mobile Charger</a></li>
+                  <li><a href="shop.html?cat=Utility&type=Hook">Bag Hook</a></li>
+                  <li><a href="shop.html?cat=Utility&type=Tyres">Tyres</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4>Maintenance</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Care&type=Cleaner">Chain Cleaner</a></li>
+                  <li><a href="shop.html?cat=Care&type=Oil">Engine Oil</a></li>
+                  <li><a href="shop.html?cat=Care&type=Polish">Polish & Wax</a></li>
+                  <li><a href="shop.html?cat=Care&type=Fluid">Brake Fluid</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item has-submenu">
+          <a href="shop.html?cat=Kids" class="nav-link">Kids Wear</a>
+          <div class="mega-menu">
+            <div class="mega-content">
+              <div class="mega-column">
+                <h4>Safety Gear</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Kids&type=Helmet">Kids Helmet</a></li>
+                  <li><a href="shop.html?cat=Kids&type=Belt">Safety Belt</a></li>
+                  <li><a href="shop.html?cat=Kids&type=Guard">Knee Guard</a></li>
+                  <li><a href="shop.html?cat=Kids&type=Sleeves">Arm Sleeves</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4>Apparel</h4>
+                <ul>
+                  <li><a href="shop.html?cat=Kids&type=TShirt">T-Shirts</a></li>
+                  <li><a href="shop.html?cat=Kids&type=Jacket">Jackets</a></li>
+                  <li><a href="shop.html?cat=Kids&type=Gloves">Gloves</a></li>
+                  <li><a href="shop.html?cat=Kids&type=Cap">Caps</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a href="shop.html?sort=new" class="nav-link">New Launches</a>
+        </li>
+
+        <li class="nav-item">
+          <a href="shop.html?sort=trending" class="nav-link">Trending</a>
+        </li>
+
+        <li class="nav-item">
+          <a href="shop.html?sort=sale" class="nav-link">On Sale</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-content">
+      <ul class="mobile-nav-menu">
+        <li class="mobile-menu-item"><a href="shop.html?cat=Helmets">Helmets</a></li>
+        <li class="mobile-menu-item"><a href="shop.html?cat=Gear">Riding Gear</a></li>
+        <li class="mobile-menu-item"><a href="shop.html?cat=Urban">Urban Wear</a></li>
+        <li class="mobile-menu-item"><a href="shop.html?cat=Security">Protection & Security</a></li>
+        <li class="mobile-menu-item"><a href="shop.html?cat=Style">Style</a></li>
+        <li class="mobile-menu-item"><a href="shop.html?cat=Kids">Kids Wear</a></li>
+        <li class="mobile-menu-item"><a href="shop.html?sort=new">New Launches</a></li>
+        <li class="mobile-menu-item"><a href="shop.html?sort=trending">Trending</a></li>
+        <li class="mobile-menu-item"><a href="shop.html?sort=sale">On Sale</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
 
 <!-- HERO CAROUSEL -->
 <section class="hero">
   <div class="slides" id="slides">
-    <div class="slide active" style="background-image:url('images/hero1.jpg')">
+    <div class="slide active" style="background-image:url('https://shop.tvsmotor.com/cdn/shop/files/Helmetmenu.jpg?v=1773136880')">
       <div class="slide-content">
-        <div class="container">
+        <!-- <div class="container">
           <div class="eyebrow">Premium Protection</div>
           <h1>Premium Protection For Every Rider.</h1>
           <p>Discover the helmet collection crafted for comfort, safety and style.</p>
           <a href="shop.html" class="btn btn-primary">Shop Now</a>
-        </div>
+        </div> -->
       </div>
     </div>
-    <div class="slide" style="background-image:url('images/hero2.jpg')">
+    <div class="slide" style="background-image:url('https://shop.tvsmotor.com/cdn/shop/files/Silk_Route_Helmet_Desktop.png?v=1773137631')">
       <div class="slide-content">
-        <div class="container">
+        <!-- <div class="container">
           <div class="eyebrow">Interior Comfort</div>
           <h1>Luxury Cabin Essentials</h1>
           <p>From hand-stitched leather covers to smart infotainment — make every drive a first-class experience.</p>
           <a href="shop.html?cat=Interior" class="btn btn-primary">Explore Interior →</a>
-        </div>
+        </div> -->
       </div>
     </div>
-    <div class="slide" style="background-image:url('images/hero3.jpg')">
+    <div class="slide" style="background-image:url('https://shop.tvsmotor.com/cdn/shop/files/Home_Page_Antimatter.png?v=1768369528')">
       <div class="slide-content">
-        <div class="container">
+        <!-- <div class="container">
           <div class="eyebrow">Performance Tuned</div>
           <h1>Built to Push Boundaries.</h1>
           <p>Forged alloys, aerodynamic upgrades and track-grade gear — for the road less traveled.</p>
           <a href="shop.html?cat=Wheels" class="btn btn-primary">Performance Parts →</a>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -103,7 +297,7 @@
 </section>
 
 <!-- CATEGORIES -->
-<section class="block">
+<!-- <section class="block">
   <div class="container">
     <div class="section-head">
       <div><h2>Shop by Category</h2><p>Find exactly what your vehicle needs — curated by experts.</p></div>
@@ -111,10 +305,10 @@
     </div>
     <div class="cats" id="cats"></div>
   </div>
-</section>
+</section> -->
 
 <!-- FEATURED PRODUCTS -->
-<section class="block" style="padding-top:0">
+<!-- <section class="block" style="padding-top:0">
   <div class="container">
     <div class="section-head">
       <div><h2>Featured Products</h2><p>Best-selling gear loved by thousands of drivers.</p></div>
@@ -122,10 +316,10 @@
     </div>
     <div class="grid" id="featured"></div>
   </div>
-</section>
+</section> -->
 
 <!-- PROMO -->
-<section class="block" style="padding-top:0">
+<!-- <section class="block" style="padding-top:0">
   <div class="container">
     <div class="promo">
       <div>
@@ -140,10 +334,10 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- NEW ARRIVALS CAROUSEL -->
-<section class="block" style="padding-top:0">
+<!-- <section class="block" style="padding-top:0">
   <div class="container">
     <div class="section-head">
       <div><h2>New Arrivals</h2><p>Fresh drops, just in.</p></div>
@@ -155,16 +349,46 @@
       <button class="car-btn next" onclick="carScroll(1)">›</button>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- FEATURES -->
-<section class="block" style="padding-top:0">
+<!-- <section class="block" style="padding-top:0">
   <div class="container">
     <div class="features">
       <div class="feat"><div class="ico">🚚</div><h4>Free Shipping</h4><p>On orders over ₹8,000</p></div>
       <div class="feat"><div class="ico">🔒</div><h4>Secure Checkout</h4><p>256-bit SSL encryption</p></div>
       <div class="feat"><div class="ico">↩️</div><h4>30-Day Returns</h4><p>Hassle-free returns</p></div>
       <div class="feat"><div class="ico">🛠️</div><h4>Expert Support</h4><p>7 days a week</p></div>
+    </div>
+  </div>
+</section> -->
+
+<!-- TVS VIDEO SECTION (inserted above Blogs) -->
+<section class="block" style="padding-top:20px;padding-bottom:20px">
+  <div class="container">
+    <div class="video-section relative flex mx-auto overflow-hidden flex-col video-section--played">
+      <div class="video-section__text">
+        <h2 class="section__block section__block--heading justify-start h1">TVS Racing Performance GEAR</h2>
+        <div class="section__block section__block--button">
+          <a class=" btn btn--secondary" href="https://shop.tvsmotor.com/search?options%5Bprefix%5D=last&amp;q=tvs+racing">View Collection
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.66699 4.66675L8.00033 8.00008L4.66699 11.3334M8.66699 4.66675L12.0003 8.00008L8.66699 11.3334" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </div>
+        <div class="section__block section__block--button">
+          <a class=" btn btn--primary" href="/search?options%5Bprefix%5D=last&amp;q=Racing&amp;filter.p.product_type=">Ride the Revolution
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.66699 4.66675L8.00033 8.00008L4.66699 11.3334M8.66699 4.66675L12.0003 8.00008L8.66699 11.3334" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="video-section__media block w-full relative">
+        <div class="media media--has-overlay absolute top-0 left-0 w-full h-full">
+          <img src="//shop.tvsmotor.com/cdn/shop/files/COver_Image.png?v=1723530674&amp;width=1680" class="img-fit object-center" style="object-position:50% 50%;width:100%;height:auto;" loading="lazy" alt="TVS Racing Performance GEAR">
+        </div>
+      </div>
     </div>
   </div>
 </section>
