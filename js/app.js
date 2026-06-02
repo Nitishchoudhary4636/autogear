@@ -52,39 +52,52 @@ function toggleWish(id){
   let w = getWish();
   if(w.includes(id)){ w = w.filter(x=>x!==id); toast("Removed from wishlist"); }
   else { w.push(id); toast("Added to wishlist"); }
-  saveWish(w);
-  document.querySelectorAll(`[data-wish="${id}"]`).forEach(b=>b.classList.toggle("active", w.includes(id)));
-}
-
-function updateBadges(){
-  const c = getCart().reduce((s,i)=>s+i.qty,0);
-  const w = getWish().length;
-  document.querySelectorAll("[data-cart-count]").forEach(e=>{ e.textContent = c; e.style.display = c?"flex":"none"; });
-  document.querySelectorAll("[data-wish-count]").forEach(e=>{ e.textContent = w; e.style.display = w?"flex":"none"; });
-}
-
-// ============ TOAST ============
-let toastTimer;
-function toast(msg){
-  let t = document.querySelector(".toast");
-  if(!t){ t = document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove("show"), 2400);
-}
-
-// ============ PRODUCT CARD ============
-function productCard(p){
-  const wishActive = getWish().includes(p.id) ? "active" : "";
-  const stars = "★".repeat(Math.round(p.rating)) + "☆".repeat(5-Math.round(p.rating));
   return `
-    <div class="card">
-      ${p.tag?`<span class="tag">${p.tag}</span>`:""}
-      <button class="wish ${wishActive}" data-wish="${p.id}" onclick="event.stopPropagation();toggleWish(${p.id})">♥</button>
-      <a href="pdp.html?id=${p.id}" class="thumb"><img src="${p.img}" alt="${p.name}" loading="lazy"></a>
-      <div class="body">
-        <span class="cat-tag">${p.category}</span>
+  <div class="top-announcement">Get Upto 20% OFF Site-Wide</div>
+  <header class="site">
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <img src="images/logo.png" alt="AutoGear">
+        <span>Auto<b>Gear</b></span>
+      </a>
+
+      <div class="search-box">
+        <input type="search" placeholder="Search for articles" aria-label="Search">
+      </div>
+
+      <nav class="nav-links" id="navLinks">
+        ${links.map(l=>`<a href="${l.h}" class="${active===l.k?'active':''}">${l.t}</a>`).join("")}
+      </nav>
+
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" title="Wishlist">
+          <svg viewBox='0 0 24 24'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/></svg>
+          <span class="badge" data-wish-count>0</span>
+        </a>
+        <a href="cart.html" class="icon-btn" title="Cart">
+          <svg viewBox='0 0 24 24'><circle cx='9' cy='21' r='1'/><circle cx='20' cy='21' r='1'/><path d='M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6'/></svg>
+          <span class="badge" data-cart-count>0</span>
+        </a>
+        ${userLink}
+        <button class="icon-btn hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+          <svg viewBox='0 0 24 24'><path d='M3 12h18M3 6h18M3 18h18'/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="sub-nav">
+    <div class="container">
+      <nav class="mini-links">
+        <a href="#">Merchandise</a>
+        <a href="#">Accessories</a>
+        <a href="#">Offer Zone</a>
+        <a href="#">Kids Wear</a>
+        <a href="#">Shop By Model</a>
+        <a href="#" class="highlight">New Launches</a>
+      </nav>
+    </div>
+  </div>`;
         <a href="pdp.html?id=${p.id}"><h3>${p.name}</h3></a>
         <div class="rating">${stars}<span>(${p.reviews})</span></div>
         <div class="price-row">
@@ -143,6 +156,8 @@ function buildHeader(active){
       </div>
     </div>
   </header>`;
+  
+  
 }
 
 function buildFooter(){
