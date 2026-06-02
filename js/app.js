@@ -52,60 +52,7 @@ function toggleWish(id){
   let w = getWish();
   if(w.includes(id)){ w = w.filter(x=>x!==id); toast("Removed from wishlist"); }
   else { w.push(id); toast("Added to wishlist"); }
-  return `
-  <div class="top-announcement">Get Upto 20% OFF Site-Wide</div>
-  <header class="site">
-    <div class="container nav">
-      <a href="index.html" class="brand">
-        <img src="images/logo.png" alt="AutoGear">
-        <span>Auto<b>Gear</b></span>
-      </a>
-
-      <div class="search-box">
-        <input type="search" placeholder="Search for articles" aria-label="Search">
-      </div>
-
-      <nav class="nav-links" id="navLinks">
-        ${links.map(l=>`<a href="${l.h}" class="${active===l.k?'active':''}">${l.t}</a>`).join("")}
-      </nav>
-
-      <div class="nav-actions">
-        <a href="wishlist.html" class="icon-btn" title="Wishlist">
-          <svg viewBox='0 0 24 24'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/></svg>
-          <span class="badge" data-wish-count>0</span>
-        </a>
-        <a href="cart.html" class="icon-btn" title="Cart">
-          <svg viewBox='0 0 24 24'><circle cx='9' cy='21' r='1'/><circle cx='20' cy='21' r='1'/><path d='M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6'/></svg>
-          <span class="badge" data-cart-count>0</span>
-        </a>
-        ${userLink}
-        <button class="icon-btn hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
-          <svg viewBox='0 0 24 24'><path d='M3 12h18M3 6h18M3 18h18'/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="sub-nav">
-    <div class="container">
-      <nav class="mini-links">
-        <a href="#">Merchandise</a>
-        <a href="#">Accessories</a>
-        <a href="#">Offer Zone</a>
-        <a href="#">Kids Wear</a>
-        <a href="#">Shop By Model</a>
-        <a href="#" class="highlight">New Launches</a>
-      </nav>
-    </div>
-  </div>`;
-        <a href="pdp.html?id=${p.id}"><h3>${p.name}</h3></a>
-        <div class="rating">${stars}<span>(${p.reviews})</span></div>
-        <div class="price-row">
-          <div class="price">${formatINR(toINR(p.price))}${p.old?`<del>${formatINR(toINR(p.old))}</del>`:""}</div>
-          <button class="add" onclick="addToCart(${p.id})">Add</button>
-        </div>
-      </div>
-    </div>`;
+  saveWish(w);
 }
 
 // ============ HEADER INJECTION ============
@@ -164,46 +111,164 @@ function buildFooter(){
   return `
   <footer class="site">
     <div class="container">
-      <div class="f-grid">
-        <div>
-          <div class="brand" style="margin-bottom:14px">
-            <img src="images/logo.png" alt="AutoGear" style="width:38px;height:38px">
-            <span>Auto<b style="color:var(--primary)">Gear</b></span>
-          </div>
-          <p style="color:var(--muted);font-size:13.5px;max-width:320px">Premium vehicle accessories trusted by 50,000+ drivers worldwide. Quality, performance and style for every ride.</p>
+      <!-- Brand Section -->
+      <div class="f-brand-section">
+        <div class="brand" style="margin-bottom:14px">
+          <img src="images/logo.png" alt="AutoGear" style="width:42px;height:42px">
+          <span style="font-size:20px;font-weight:800;letter-spacing:.5px">Auto<b style="color:var(--primary)">Gear</b></span>
         </div>
-        <div>
-          <h5>Shop</h5>
-          <a href="shop.html?cat=Interior">Interior</a>
-          <a href="shop.html?cat=Exterior">Exterior</a>
-          <a href="shop.html?cat=Lighting">Lighting</a>
-          <a href="shop.html?cat=Electronics">Electronics</a>
-        </div>
-        <div>
-          <h5>Company</h5>
-          <a href="index.html">About AutoGear</a>
-          <a href="contact.html">Contact</a>
-          <a href="#">Careers</a>
-          <a href="#">Blog</a>
-        </div>
-        <div>
-          <h5>Support</h5>
-          <a href="#">Shipping</a>
-          <a href="#">Returns</a>
-          <a href="#">Warranty</a>
-          <a href="#">FAQ</a>
+        <p style="color:var(--muted);font-size:13.5px;max-width:380px;line-height:1.6">Premium vehicle accessories trusted by 50,000+ drivers worldwide. Quality, performance and style for every ride.</p>
+        <div class="f-social" style="display:flex;gap:12px;margin-top:16px">
+          <a href="#" title="Facebook" style="width:36px;height:36px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:#666;text-decoration:none">f</a>
+          <a href="#" title="Instagram" style="width:36px;height:36px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:#666;text-decoration:none">📷</a>
+          <a href="#" title="Twitter" style="width:36px;height:36px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:#666;text-decoration:none">𝕏</a>
         </div>
       </div>
+
+      <!-- Multi-Column Menu Section -->
+      <div class="multi-menu-wrapper">
+        <!-- Helmets Column -->
+        <div class="menu-column">
+          <h3 class="menu-heading">Helmets</h3>
+          <ul class="menu-links">
+            <li><a href="shop.html?cat=Helmets&type=Under1000" class="menu-link">Helmets under ₹1,000</a></li>
+            <li><a href="shop.html?cat=Helmets&type=Under2000" class="menu-link">Helmets under ₹2,000</a></li>
+            <li><a href="shop.html?cat=Helmets&type=Under3000" class="menu-link">Helmets under ₹3,000</a></li>
+            <li><a href="shop.html?cat=Helmets&type=Under5000" class="menu-link">Helmets under ₹5,000</a></li>
+            <li><a href="shop.html?cat=Helmets&type=FullFace" class="menu-link">Full Face Helmets</a></li>
+            <li><a href="shop.html?cat=Helmets&type=HalfFace" class="menu-link">Half Face Helmets</a></li>
+            <li><a href="shop.html?cat=Helmets&type=Modular" class="menu-link">Modular Helmets</a></li>
+            <li><a href="shop.html?cat=Helmets&type=Kids" class="menu-link">Kids Helmets</a></li>
+          </ul>
+        </div>
+
+        <!-- Riding Gear Column -->
+        <div class="menu-column">
+          <h3 class="menu-heading">Riding Gear</h3>
+          <ul class="menu-links">
+            <li><a href="shop.html?cat=Gear&type=Jacket" class="menu-link">Riding Jackets</a></li>
+            <li><a href="shop.html?cat=Gear&type=Shoes" class="menu-link">Riding Shoes</a></li>
+            <li><a href="shop.html?cat=Gear&type=Gloves" class="menu-link">Riding Gloves</a></li>
+            <li><a href="shop.html?cat=Gear&type=Armor" class="menu-link">Body Armor & Protection</a></li>
+            <li><a href="shop.html?cat=Gear&type=Pants" class="menu-link">Riding Pants</a></li>
+            <li><a href="shop.html?cat=Gear&type=Rainwear" class="menu-link">Rainwear & Covers</a></li>
+            <li><a href="shop.html?cat=Gear&type=Backpack" class="menu-link">Riding Backpacks</a></li>
+          </ul>
+        </div>
+
+        <!-- Accessories Column -->
+        <div class="menu-column">
+          <h3 class="menu-heading">Accessories</h3>
+          <ul class="menu-links">
+            <li><a href="shop.html?cat=Security&type=Lock" class="menu-link">Helmet Locks</a></li>
+            <li><a href="shop.html?cat=Security&type=Guard" class="menu-link">Crash Guards</a></li>
+            <li><a href="shop.html?cat=Style&type=Tank" class="menu-link">Tank Pads</a></li>
+            <li><a href="shop.html?cat=Utility&type=Stand" class="menu-link">Side Stands</a></li>
+            <li><a href="shop.html?cat=Utility&type=Charger" class="menu-link">Mobile Chargers</a></li>
+            <li><a href="shop.html?cat=Care&type=Cleaner" class="menu-link">Chain Cleaners</a></li>
+            <li><a href="shop.html?cat=Care&type=Oil" class="menu-link">Engine Oil & Fluids</a></li>
+            <li><a href="shop.html?cat=Care&type=Polish" class="menu-link">Polish & Wax</a></li>
+          </ul>
+        </div>
+
+        <!-- Urban Wear Column -->
+        <div class="menu-column">
+          <h3 class="menu-heading">Urban Wear</h3>
+          <ul class="menu-links">
+            <li><a href="shop.html?cat=Urban&type=Shirts" class="menu-link">T-Shirts & Shirts</a></li>
+            <li><a href="shop.html?cat=Urban&type=Caps" class="menu-link">Caps & Hats</a></li>
+            <li><a href="shop.html?cat=Urban&type=Bags" class="menu-link">Bags & Backpacks</a></li>
+            <li><a href="shop.html?cat=Urban&type=Sweatshirt" class="menu-link">Sweatshirts & Hoodies</a></li>
+            <li><a href="shop.html?cat=Urban&type=Shoes" class="menu-link">Casual Shoes</a></li>
+            <li><a href="shop.html?cat=Urban&type=Jacket" class="menu-link">Casual Jackets</a></li>
+          </ul>
+        </div>
+
+        <!-- Kids Wear Column -->
+        <div class="menu-column">
+          <h3 class="menu-heading">Kids Wear</h3>
+          <ul class="menu-links">
+            <li><a href="shop.html?cat=Kids&type=Helmet" class="menu-link">Kids Helmets</a></li>
+            <li><a href="shop.html?cat=Kids&type=TShirt" class="menu-link">Kids T-Shirts</a></li>
+            <li><a href="shop.html?cat=Kids&type=Jacket" class="menu-link">Kids Jackets</a></li>
+            <li><a href="shop.html?cat=Kids&type=Gloves" class="menu-link">Kids Gloves</a></li>
+            <li><a href="shop.html?cat=Kids&type=Shoes" class="menu-link">Kids Shoes</a></li>
+            <li><a href="shop.html?cat=Kids&type=Belt" class="menu-link">Safety Belts</a></li>
+            <li><a href="shop.html?cat=Kids&type=Cap" class="menu-link">Kids Caps</a></li>
+          </ul>
+        </div>
+
+        <!-- Support Column -->
+        <div class="menu-column">
+          <h3 class="menu-heading">Support</h3>
+          <ul class="menu-links">
+            <li><a href="contact.html" class="menu-link">Contact Us</a></li>
+            <li><a href="#" class="menu-link">Shipping Info</a></li>
+            <li><a href="#" class="menu-link">Returns & Exchange</a></li>
+            <li><a href="#" class="menu-link">Warranty</a></li>
+            <li><a href="#" class="menu-link">Size Guide</a></li>
+            <li><a href="#" class="menu-link">FAQ</a></li>
+            <li><a href="index.html" class="menu-link">About AutoGear</a></li>
+            <li><a href="#" class="menu-link">Blog</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
       <div class="f-bottom">
-        <span>© ${new Date().getFullYear()} AutoGear Industries. All rights reserved.</span>
-        <span>Privacy · Terms · Cookies</span>
+        <span style="color:var(--muted);font-size:13px">© ${new Date().getFullYear()} AutoGear Industries. All rights reserved.</span>
+        <div style="display:flex;gap:20px;color:var(--muted);font-size:13px">
+          <a href="#" style="color:var(--muted);text-decoration:none">Privacy Policy</a>
+          <a href="#" style="color:var(--muted);text-decoration:none">Terms & Conditions</a>
+          <a href="#" style="color:var(--muted);text-decoration:none">Cookie Policy</a>
+        </div>
       </div>
     </div>
   </footer>`;
 }
 
 function mountChrome(active){
-  document.getElementById("header").innerHTML = buildHeader(active);
   document.getElementById("footer").innerHTML = buildFooter();
   updateBadges();
+  initMobileMenu();
+}
+
+// ============ MOBILE MENU & MEGA MENU INIT ============
+function initMobileMenu(){
+  const hamburger = document.getElementById("hamburger");
+  const mobileMenu = document.getElementById("mobileMenu");
+  
+  if(!hamburger) return;
+  
+  // Hamburger toggle
+  hamburger.addEventListener("click", function(e){
+    e.stopPropagation();
+    hamburger.classList.toggle("active");
+    mobileMenu.classList.toggle("open");
+  });
+  
+  // Close menu when a link is clicked
+  document.querySelectorAll(".mobile-menu-item a").forEach(link => {
+    link.addEventListener("click", function(){
+      hamburger.classList.remove("active");
+      mobileMenu.classList.remove("open");
+    });
+  });
+  
+  // Close menu when clicking outside
+  document.addEventListener("click", function(e){
+    if(!e.target.closest(".hamburger") && !e.target.closest(".mobile-menu")){
+      hamburger.classList.remove("active");
+      mobileMenu.classList.remove("open");
+    }
+  });
+  
+  // Update cart badge
+  updateBadges();
+}
+
+function updateBadges(){
+  const cartCount = getCart().reduce((sum, item) => sum + item.qty, 0);
+  const cartBadge = document.getElementById("cartCount");
+  if(cartBadge) cartBadge.textContent = cartCount;
 }
