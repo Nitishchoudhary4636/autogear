@@ -16,6 +16,18 @@ function logout(){
 }
 
 // ============ CART / WISHLIST ============
+const USD_TO_INR = 83;
+
+function toINR(amount){ return amount * USD_TO_INR; }
+function formatINR(amount){
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount);
+}
+
 function getCart(){ return JSON.parse(localStorage.getItem("ag_cart") || "[]"); }
 function saveCart(c){ localStorage.setItem("ag_cart", JSON.stringify(c)); updateBadges(); }
 function getWish(){ return JSON.parse(localStorage.getItem("ag_wish") || "[]"); }
@@ -76,7 +88,7 @@ function productCard(p){
         <a href="pdp.html?id=${p.id}"><h3>${p.name}</h3></a>
         <div class="rating">${stars}<span>(${p.reviews})</span></div>
         <div class="price-row">
-          <div class="price">$${p.price.toFixed(2)}${p.old?`<del>$${p.old.toFixed(2)}</del>`:""}</div>
+          <div class="price">${formatINR(toINR(p.price))}${p.old?`<del>${formatINR(toINR(p.old))}</del>`:""}</div>
           <button class="add" onclick="addToCart(${p.id})">Add</button>
         </div>
       </div>

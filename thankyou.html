@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thank You — AutoGear</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="header"></div>
+
+<div class="thankyou-wrap">
+  <div class="container">
+    <div class="thankyou-card" id="thankyouCard"></div>
+  </div>
+</div>
+
+<div id="footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome();
+
+const order = JSON.parse(localStorage.getItem("ag_last_order") || "null");
+if(!order){
+  toast("No order found");
+  setTimeout(()=>location.href="shop.html",700);
+}
+
+document.getElementById("thankyouCard").innerHTML = order ? `
+  <div class="thankyou-hero">
+    <div class="checkmark">✓</div>
+    <div>
+      <span class="eyebrow-inline">Order confirmed</span>
+      <h1>Thank you for your purchase</h1>
+      <p>Your order has been placed successfully. A confirmation email will be sent to ${order.customer.email}.</p>
+    </div>
+  </div>
+
+  <div class="thankyou-grid">
+    <div class="panel">
+      <h3>Order Details</h3>
+      <div class="detail-row"><span>Order ID</span><strong>${order.id}</strong></div>
+      <div class="detail-row"><span>Payment</span><strong>${order.payment.label}</strong></div>
+      <div class="detail-row"><span>Delivery</span><strong>${order.address.delivery}</strong></div>
+      <div class="detail-row"><span>Total</span><strong>${formatINR(toINR(order.total))}</strong></div>
+    </div>
+    <div class="panel">
+      <h3>Shipping Address</h3>
+      <p>${order.customer.fullName}</p>
+      <p>${order.address.address1}${order.address.address2 ? ", " + order.address.address2 : ""}</p>
+      <p>${order.address.city}, ${order.address.state} - ${order.address.pincode}</p>
+      <p>${order.customer.phone}</p>
+    </div>
+    <div class="panel wide">
+      <h3>Items Purchased</h3>
+      <div class="thankyou-items">
+        ${order.items.map(i=>`
+          <div class="summary-item">
+            <img src="${i.img}" alt="${i.name}">
+            <div>
+              <h4>${i.name}</h4>
+              <span>${i.qty} x ${formatINR(toINR(i.price))}</span>
+            </div>
+            <strong>${formatINR(toINR(i.price*i.qty))}</strong>
+          </div>`).join("")}
+      </div>
+    </div>
+  </div>
+
+  <div class="thankyou-actions">
+    <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
+    <a href="index.html" class="btn btn-ghost">Back to Home</a>
+  </div>
+` : "";
+</script>
+</body>
+</html>

@@ -7,6 +7,9 @@ A complete, production-ready multi-page e-commerce website built with pure HTML,
 - `shop.html` - Product Listing Page (PLP) with category/price/rating filters & sorting
 - `pdp.html?id=N` - Product Detail Page with gallery, qty, specs, related items
 - `cart.html` - Shopping cart with quantity controls & order summary
+- `checkout.html` - Shipping address and delivery details step
+- `payment.html` - Payment method step with UPI, card, and COD demo flow
+- `thankyou.html` - Purchase confirmation with order summary
 - `wishlist.html` - Saved items
 - `login.html` / `signup.html` - Auth (localStorage for users, session/localStorage for session)
 - `contact.html` - Contact form & company info

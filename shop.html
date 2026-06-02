@@ -26,10 +26,10 @@
       <div class="filter-group" id="catFilters"></div>
       <h4>Price Range</h4>
       <div class="filter-group">
-        <label><input type="checkbox" class="price-f" value="0-50"> Under $50</label>
-        <label><input type="checkbox" class="price-f" value="50-150"> $50 – $150</label>
-        <label><input type="checkbox" class="price-f" value="150-300"> $150 – $300</label>
-        <label><input type="checkbox" class="price-f" value="300-9999"> Over $300</label>
+        <label><input type="checkbox" class="price-f" value="0-5000"> Under ₹5,000</label>
+        <label><input type="checkbox" class="price-f" value="5000-12500"> ₹5,000 – ₹12,500</label>
+        <label><input type="checkbox" class="price-f" value="12500-25000"> ₹12,500 – ₹25,000</label>
+        <label><input type="checkbox" class="price-f" value="25000-999999"> Over ₹25,000</label>
       </div>
       <h4>Rating</h4>
       <div class="filter-group">
@@ -82,12 +82,13 @@ function render(){
 
   let list = PRODUCTS.filter(p=>{
     if(cats.length && !cats.includes(p.category)) return false;
-    if(prices.length && !prices.some(([a,b])=>p.price>=a && p.price<=b)) return false;
+    const priceINR = toINR(p.price);
+    if(prices.length && !prices.some(([a,b])=>priceINR>=a && priceINR<=b)) return false;
     if(rat && p.rating < rat) return false;
     return true;
   });
-  if(sort==="low") list.sort((a,b)=>a.price-b.price);
-  if(sort==="high") list.sort((a,b)=>b.price-a.price);
+  if(sort==="low") list.sort((a,b)=>toINR(a.price)-toINR(b.price));
+  if(sort==="high") list.sort((a,b)=>toINR(b.price)-toINR(a.price));
   if(sort==="rating") list.sort((a,b)=>b.rating-a.rating);
 
   document.getElementById("resultCount").textContent = `${list.length} product${list.length!==1?'s':''} found`;

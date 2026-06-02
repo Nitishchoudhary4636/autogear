@@ -47,7 +47,7 @@ document.getElementById("pdp").innerHTML = `
     <div class="crumbs"><a href="index.html">Home</a> / <a href="shop.html?cat=${p.category}">${p.category}</a></div>
     <h1>${p.name}</h1>
     <div class="rating" style="font-size:15px">${stars}<span>(${p.reviews} reviews)</span></div>
-    <div class="price">$${p.price.toFixed(2)} ${p.old?`<del style="font-size:18px;color:var(--muted)">$${p.old.toFixed(2)}</del>`:""}</div>
+    <div class="price">${formatINR(toINR(p.price))} ${p.old?`<del style="font-size:18px;color:var(--muted)">${formatINR(toINR(p.old))}</del>`:""}</div>
     <p class="desc">${p.desc}</p>
     <div class="pdp-actions">
       <div class="qty">

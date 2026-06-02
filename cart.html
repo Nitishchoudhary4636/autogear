@@ -48,7 +48,7 @@ function render(){
             <div class="info">
               <h4>${i.name}</h4>
               <span style="color:var(--muted);font-size:13px">${i.category}</span>
-              <div class="p">$${i.price.toFixed(2)}</div>
+              <div class="p">${formatINR(toINR(i.price))}</div>
               <div class="qty" style="margin-top:8px">
                 <button onclick="updateCartQty(${i.id},${i.qty-1});render()">−</button>
                 <input value="${i.qty}" readonly>
@@ -60,10 +60,10 @@ function render(){
       </div>
       <div class="summary">
         <h3>Order Summary</h3>
-        <div class="line"><span>Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} items)</span><span>$${sub.toFixed(2)}</span></div>
-        <div class="line"><span>Shipping</span><span>${ship===0?"FREE":"$"+ship.toFixed(2)}</span></div>
-        <div class="line"><span>Tax (8%)</span><span>$${tax.toFixed(2)}</span></div>
-        <div class="total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+        <div class="line"><span>Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} items)</span><span>${formatINR(toINR(sub))}</span></div>
+        <div class="line"><span>Shipping</span><span>${ship===0?"FREE":formatINR(toINR(ship))}</span></div>
+        <div class="line"><span>Tax (8%)</span><span>${formatINR(toINR(tax))}</span></div>
+        <div class="total"><span>Total</span><span>${formatINR(toINR(total))}</span></div>
         <button class="btn btn-primary btn-block" style="margin-top:18px" onclick="checkout()">Proceed to Checkout</button>
         <a href="shop.html" class="btn btn-ghost btn-block" style="margin-top:10px">Continue Shopping</a>
       </div>
@@ -71,13 +71,13 @@ function render(){
 }
 
 function checkout(){
-  if(!currentUser()){
-    toast("Please login to checkout");
-    setTimeout(()=>location.href="login.html",900);
+  if(!getCart().length){
+    toast("Add items to cart first");
     return;
   }
-  toast("Order placed! 🎉 (demo)");
-  setTimeout(()=>{ localStorage.removeItem("ag_cart"); render(); updateBadges(); }, 1200);
+  localStorage.removeItem("ag_checkout_draft");
+  localStorage.removeItem("ag_payment_draft");
+  setTimeout(()=>location.href="checkout.html",250);
 }
 render();
 </script>
