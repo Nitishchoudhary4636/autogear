@@ -111,15 +111,22 @@ function buildHeader(active){
     {h:"contact.html",t:"Contact",k:"contact"}
   ];
   return `
+  <div class="top-announcement">Get Upto 20% OFF Site-Wide</div>
   <header class="site">
     <div class="container nav">
       <a href="index.html" class="brand">
         <img src="images/logo.png" alt="AutoGear">
         <span>Auto<b>Gear</b></span>
       </a>
+
+      <div class="search-box">
+        <input type="search" placeholder="Search for articles" aria-label="Search">
+      </div>
+
       <nav class="nav-links" id="navLinks">
         ${links.map(l=>`<a href="${l.h}" class="${active===l.k?'active':''}">${l.t}</a>`).join("")}
       </nav>
+
       <div class="nav-actions">
         <a href="wishlist.html" class="icon-btn" title="Wishlist">
           <svg viewBox='0 0 24 24'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/></svg>

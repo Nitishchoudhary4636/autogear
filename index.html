@@ -19,10 +19,10 @@
     <div class="slide active" style="background-image:url('images/hero1.jpg')">
       <div class="slide-content">
         <div class="container">
-          <div class="eyebrow">New 2026 Collection</div>
-          <h1>Upgrade Your Ride. Own The Road.</h1>
-          <p>Premium accessories engineered for performance, designed for the driver who demands more.</p>
-          <a href="shop.html" class="btn btn-primary">Shop Now →</a>
+          <div class="eyebrow">Premium Protection</div>
+          <h1>Premium Protection For Every Rider.</h1>
+          <p>Discover the helmet collection crafted for comfort, safety and style.</p>
+          <a href="shop.html" class="btn btn-primary">Shop Now</a>
         </div>
       </div>
     </div>
@@ -50,6 +50,56 @@
   <button class="hero-arrow prev" onclick="slidePrev()">‹</button>
   <button class="hero-arrow next" onclick="slideNext()">›</button>
   <div class="dots" id="dots"></div>
+</section>
+
+<!-- ACCESSORIES BY MODEL (tabs + carousel) -->
+<section class="block model-section">
+  <div class="container">
+    <div class="model-tabs">
+      <button class="tab active">Accessories By Model</button>
+      <button class="tab">Categories</button>
+      <button class="tab">Trending Products</button>
+    </div>
+
+    <div class="model-filter">
+      <div class="model-title"><h3>ACCESSORIES BY MODEL</h3></div>
+      <div class="model-types"><button class="pill active">Motorcycle</button><button class="pill">Scooter</button><button class="pill">Moped</button></div>
+    </div>
+
+    <div class="model-carousel" id="modelCarousel">
+      <div class="model-item">
+        <img src="images/p1.jpg" alt="model 1">
+        <div class="model-caption">TVS RONIN 2022 EDITION</div>
+      </div>
+      <div class="model-item">
+        <img src="images/p2.jpg" alt="model 2">
+        <div class="model-caption">TVS RONIN 2025 EDITION</div>
+      </div>
+      <div class="model-item">
+        <img src="images/p3.jpg" alt="model 3">
+        <div class="model-caption">TVS APACHE RTX</div>
+      </div>
+      <div class="model-item">
+        <img src="images/p4.jpg" alt="model 4">
+        <div class="model-caption">TVS APACHE RTR 310</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LARGE VIDEO / HERO BANNER -->
+<section class="block video-hero">
+  <div class="container">
+    <div class="video-hero-inner">
+      <div class="video-media" style="background-image:url('images/p5.jpg')"></div>
+      <div class="video-content">
+        <div class="eyebrow">TVS RACING</div>
+        <h2>TVS RACING PERFORMANCE GEAR</h2>
+        <p>High-performance apparel and gear engineered for track and street.</p>
+        <div class="video-ctas"><a href="shop.html" class="btn btn-ghost">View Collection →</a><a href="#" class="btn btn-primary">Ride the Revolution →</a></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- CATEGORIES -->
@@ -119,6 +169,52 @@
   </div>
 </section>
 
+<!-- BLOGS -->
+<section class="block" style="padding-top:20px;padding-bottom:20px">
+  <div class="container">
+    <div class="section-head">
+      <div><h2>Blogs</h2><p></p></div>
+      <a href="#">View all</a>
+    </div>
+    <div class="blogs">
+      <article class="blog-card">
+        <img src="images/p6.jpg" alt="blog1">
+        <h4>The Solo Bike Rider's Toolkit: What to Carry When You're Alone</h4>
+        <p class="meta">OnlineSupport TVS | May 3, 2026</p>
+        <p>There's something magical about a solo bike ride — take these essentials along.</p>
+      </article>
+      <article class="blog-card">
+        <img src="images/p7.jpg" alt="blog2">
+        <h4>Helmet Hair Protection Tips for Every Hair Type</h4>
+        <p class="meta">OnlineSupport TVS | May 2, 2026</p>
+        <p>Practical tips to keep your hair healthy while wearing helmets regularly.</p>
+      </article>
+      <article class="blog-card">
+        <img src="images/p8.jpg" alt="blog3">
+        <h4>Best Bike Trips in India: South India's Coffee Trails</h4>
+        <p class="meta">OnlineSupport TVS | May 1, 2026</p>
+        <p>Three scenic routes that every rider should experience at least once.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER / CTA -->
+<section class="block newsletter-block" style="padding-top:0;padding-bottom:40px">
+  <div class="container">
+    <div class="newsletter-hero" style="background-image:url('images/p5.jpg')">
+      <div class="newsletter-box">
+        <h3>JOIN OUR NEWSLETTER</h3>
+        <p>Sign up for our newsletter and be the first to know about coupons and special promotions.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!')">
+          <input type="email" placeholder="Enter your email" required>
+          <button class="btn btn-primary">SUBSCIBE →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div id="footer"></div>
 
 <script src="js/data.js"></script>
@@ -164,6 +260,17 @@ document.querySelector(".hero").addEventListener("mouseleave",()=>autoSlide=setI
 function carScroll(dir){
   document.getElementById("carTrack").scrollBy({left:dir*320, behavior:"smooth"});
 }
+
+// Model carousel simple controls
+const modelTrack = document.getElementById('modelCarousel');
+if(modelTrack){
+  let mPos = 0;
+  setInterval(()=>{ if(modelTrack.scrollWidth>modelTrack.clientWidth) modelTrack.scrollBy({left:220, behavior:'smooth'}); },4000);
+  document.querySelectorAll('.model-types .pill').forEach(p=>p.addEventListener('click',e=>{ document.querySelectorAll('.model-types .pill').forEach(x=>x.classList.remove('active')); e.currentTarget.classList.add('active'); }));
+}
+
+// Newsletter simple handler (keeps page client-side)
+document.querySelectorAll('.newsletter-form').forEach(f=>f.addEventListener('submit',e=>{ e.preventDefault(); const email=f.querySelector('input[type=email]').value; if(!email) return alert('Enter email'); f.querySelector('input').value=''; alert('Thanks — subscribed: '+email); }));
 </script>
 </body>
 </html>
