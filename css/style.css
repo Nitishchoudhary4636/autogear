@@ -305,6 +305,11 @@ footer.site{background:#0a0a0d;border-top:1px solid var(--border);padding:60px 0
 .contact-form textarea{width:100%;background:#0d0e12;border:1px solid var(--border);color:#fff;padding:13px 14px;border-radius:10px;font-family:inherit;min-height:130px;resize:vertical;outline:none}
 .contact-form textarea:focus{border-color:var(--primary)}
 
+/* HELMETS LINKS */
+.helmets-links{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.helmets-links a{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:left;color:var(--muted);font-size:14px;font-weight:500;text-decoration:none;transition:all .25s}
+.helmets-links a:hover{color:var(--text);border-color:var(--primary);transform:translateY(-2px)}
+
 /* PAGE HEADER */
 .page-head{background:linear-gradient(180deg,#15161c,#0d0d10);padding:50px 0;border-bottom:1px solid var(--border)}
 .page-head h1{font-size:36px;font-weight:800}
@@ -328,6 +333,7 @@ footer.site{background:#0a0a0d;border-top:1px solid var(--border);padding:60px 0
   .f-grid{grid-template-columns:1fr 1fr;gap:30px}
   .hero{height:480px}
   .thankyou-grid{grid-template-columns:1fr}
+  .helmets-links{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:560px){
   .cats,.grid{grid-template-columns:1fr 1fr;gap:12px}
@@ -337,4 +343,5 @@ footer.site{background:#0a0a0d;border-top:1px solid var(--border);padding:60px 0
   .nav{height:64px}
   section.block{padding:50px 0}
   .hero{height:440px}
+  .helmets-links{grid-template-columns:1fr}
 }
