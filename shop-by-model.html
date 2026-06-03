@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop By Model — TVS Motor Company</title>
+<meta name="description" content="Select your TVS vehicle and shop genuine model-specific accessories.">
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0757/0722/0250/files/faveicon.png?v=1726735244&amp;crop=center&amp;width=32&amp;height=32">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="model-page">
+<div id="header"></div>
+
+<div class="model-top">
+  <div class="container">
+    <nav class="model-breadcrumbs" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span>›</span><a href="shop.html">Accessories</a><span>›</span><span>Shop By Model</span>
+    </nav>
+  </div>
+</div>
+
+<section class="model-select-section">
+  <div class="container model-select-inner">
+    <div class="model-select-copy">
+      <h1>Select Your Vehicle</h1>
+      <p>Choose your vehicle from our wide selection to find the perfect match for your needs and performance.</p>
+      <label class="model-select-label" for="vehicleSelect">SELECT YOUR VEHICLE</label>
+      <select id="vehicleSelect" class="model-select"></select>
+    </div>
+    <div class="model-select-visual">
+      <img id="modelHeroImg" src="" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="model-rec-section">
+  <div class="container">
+    <h2 class="model-rec-title">Recommended Products</h2>
+    <div class="model-row acc-row">
+      <button class="model-arrow acc-arrow prev" type="button" onclick="modelScroll(this,-1)" aria-label="Previous">‹</button>
+      <div class="model-rec-track acc-track" id="recommendedTrack"></div>
+      <button class="model-arrow acc-arrow next" type="button" onclick="modelScroll(this,1)" aria-label="Next">›</button>
+    </div>
+  </div>
+</section>
+
+<div class="model-toolbar-wrap">
+  <div class="container">
+    <div class="model-toolbar">
+      <button type="button" class="model-filter-btn" id="filterBtn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        Filter
+      </button>
+      <div class="model-sort">
+        <label for="modelSort">Sort by:</label>
+        <select id="modelSort">
+          <option value="bestselling">Best selling</option>
+          <option value="price-asc">Price, low to high</option>
+          <option value="price-desc">Price, high to low</option>
+          <option value="rating">Top rated</option>
+        </select>
+      </div>
+      <p class="model-count" id="productCount"></p>
+      <div class="model-view">
+        <span>View as</span>
+        <button type="button" class="model-view-btn active" data-view="grid" aria-label="Grid">▦</button>
+        <button type="button" class="model-view-btn" data-view="list" aria-label="List">☰</button>
+      </div>
+    </div>
+    <div class="model-quick-tags" id="quickTags"></div>
+  </div>
+</div>
+
+<section class="model-catalog">
+  <div class="container">
+    <div class="model-grid" id="modelGrid"></div>
+    <div class="model-empty" id="modelEmpty" hidden>
+      <p>No accessories found for this model.</p>
+    </div>
+    <nav class="model-pagination" id="modelPagination" aria-label="Pagination"></nav>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome("model");
+
+const searchInput = document.getElementById("headerSearch");
+if(searchInput) searchInput.placeholder = "Search for collections";
+
+const PER_PAGE = 8;
+let currentModelId = getSelectedModelId();
+const state = { sort: "bestselling", view: "grid", page: 1, cat: "" };
+
+const vehicleSelect = document.getElementById("vehicleSelect");
+vehicleSelect.innerHTML = VEHICLE_MODELS.map(m =>
+  `<option value="${m.id}">${m.name}</option>`).join("");
+vehicleSelect.value = currentModelId;
+setSelectedModelId(currentModelId);
+
+function updateHero(){
+  const model = getVehicleModel(currentModelId);
+  document.getElementById("modelHeroImg").src = model.img;
+  document.getElementById("modelHeroImg").alt = model.name;
+  document.title = model.name + " Accessories — TVS Motor Company";
+}
+
+function getSortedProducts(){
+  let list = getModelProducts(currentModelId);
+  if(state.cat) list = list.filter(p => p.category === state.cat);
+  switch(state.sort){
+    case "price-asc": list.sort((a, b) => a.price - b.price); break;
+    case "price-desc": list.sort((a, b) => b.price - a.price); break;
+    case "rating": list.sort((a, b) => b.rating - a.rating || b.reviews - a.reviews); break;
+    default: list.sort((a, b) => b.reviews - a.reviews);
+  }
+  return list;
+}
+
+function renderQuickTags(){
+  const model = getVehicleModel(currentModelId);
+  const cats = [...new Set(getModelProducts(currentModelId).map(p => p.category))];
+  document.getElementById("quickTags").innerHTML = `
+    <button type="button" class="model-tag ${!state.cat ? "active" : ""}" data-cat="">Accessories</button>
+    <button type="button" class="model-tag model-tag-model active-style">${model.name.replace("TVS ", "")}</button>
+    ${cats.map(c => `<button type="button" class="model-tag ${state.cat === c ? "active" : ""}" data-cat="${c}">${c}</button>`).join("")}`;
+}
+
+function renderPage(){
+  const list = getSortedProducts();
+  const model = getVehicleModel(currentModelId);
+  const totalPages = Math.max(1, Math.ceil(list.length / PER_PAGE));
+  if(state.page > totalPages) state.page = totalPages;
+  const start = (state.page - 1) * PER_PAGE;
+  const pageItems = list.slice(start, start + PER_PAGE);
+
+  document.getElementById("productCount").textContent = list.length
+    ? `Showing ${start + 1} – ${Math.min(start + PER_PAGE, list.length)} of ${list.length} products`
+    : "";
+
+  const rec = getModelProducts(currentModelId).slice(0, 6);
+  document.getElementById("recommendedTrack").innerHTML = rec.map(collectionCard).join("");
+
+  const grid = document.getElementById("modelGrid");
+  grid.classList.toggle("list-view", state.view === "list");
+
+  if(!pageItems.length){
+    grid.innerHTML = "";
+    document.getElementById("modelEmpty").hidden = false;
+    document.getElementById("modelPagination").innerHTML = "";
+    renderQuickTags();
+    return;
+  }
+  document.getElementById("modelEmpty").hidden = true;
+  grid.innerHTML = pageItems.map(collectionCard).join("");
+
+  const pag = document.getElementById("modelPagination");
+  if(totalPages <= 1){ pag.innerHTML = ""; }
+  else {
+    let html = `<button type="button" ${state.page === 1 ? "disabled" : ""} onclick="goModelPage(${state.page - 1})">Previous</button>`;
+    for(let i = 1; i <= totalPages; i++){
+      html += `<button type="button" class="${i === state.page ? "active" : ""}" onclick="goModelPage(${i})">${i}</button>`;
+    }
+    html += `<button type="button" ${state.page === totalPages ? "disabled" : ""} onclick="goModelPage(${state.page + 1})">Next</button>`;
+    pag.innerHTML = html;
+  }
+  renderQuickTags();
+}
+
+function goModelPage(n){
+  state.page = n;
+  renderPage();
+  document.querySelector(".model-catalog").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function modelScroll(btn, dir){
+  const track = btn.closest(".model-row").querySelector(".acc-track");
+  if(track) track.scrollBy({ left: dir * 280, behavior: "smooth" });
+}
+
+function onModelChange(modelId){
+  currentModelId = modelId;
+  setSelectedModelId(modelId);
+  state.page = 1;
+  state.cat = "";
+  history.replaceState(null, "", `shop-by-model.html?model=${encodeURIComponent(modelId)}`);
+  updateHero();
+  renderPage();
+}
+
+vehicleSelect.addEventListener("change", () => onModelChange(vehicleSelect.value));
+
+document.getElementById("modelSort").addEventListener("change", e => {
+  state.sort = e.target.value;
+  state.page = 1;
+  renderPage();
+});
+
+document.getElementById("filterBtn").addEventListener("click", () => toast("Filters — demo"));
+
+document.querySelectorAll(".model-view-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.view = btn.dataset.view;
+    document.querySelectorAll(".model-view-btn").forEach(b => b.classList.toggle("active", b === btn));
+    renderPage();
+  });
+});
+
+document.getElementById("quickTags").addEventListener("click", e => {
+  const tag = e.target.closest(".model-tag[data-cat]");
+  if(!tag || tag.classList.contains("model-tag-model")) return;
+  state.cat = tag.dataset.cat;
+  state.page = 1;
+  renderPage();
+});
+
+updateHero();
+renderPage();
+</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Merchandise — TVS Motor Company</title>
+<meta name="description" content="Shop TVS merchandise — helmets, urban wear, riding gear and best sellers.">
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0757/0722/0250/files/faveicon.png?v=1726735244&amp;crop=center&amp;width=32&amp;height=32">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="merch-page">
+<div id="header"></div>
+
+<!-- Hero collage -->
+<section class="merch-hero" aria-label="Merchandise banner">
+  <div class="merch-hero-panel"><img src="https://shop.tvsmotor.com/cdn/shop/files/Silk_Route_Helmet_Desktop.png?v=1773137631" alt="Riding gear"></div>
+  <div class="merch-hero-panel"><img src="https://shop.tvsmotor.com/cdn/shop/files/Home_Page_Antimatter.png?v=1768369528" alt="Urban wear"></div>
+  <div class="merch-hero-panel"><img src="https://shop.tvsmotor.com/cdn/shop/files/Helmetmenu.jpg?v=1773136880" alt="Helmets"></div>
+</section>
+
+<!-- Shop by category -->
+<section class="merch-section">
+  <div class="container">
+    <h2 class="merch-title-center">Shop By Category</h2>
+    <div class="merch-cat-grid" id="merchCategories"></div>
+  </div>
+</section>
+
+<!-- Best Sellers -->
+<section class="merch-section merch-section-alt">
+  <div class="container">
+    <div class="merch-section-head">
+      <h2>Shop the Best Sellers</h2>
+      <a href="#catalog">View all</a>
+    </div>
+    <div class="merch-row">
+      <button class="merch-arrow prev" type="button" onclick="merchScroll(this,-1)" aria-label="Previous">‹</button>
+      <div class="merch-track" id="bestSellers"></div>
+      <button class="merch-arrow next" type="button" onclick="merchScroll(this,1)" aria-label="Next">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- Newly Launched -->
+<section class="merch-section">
+  <div class="container">
+    <div class="merch-section-head">
+      <h2>Newly Launched Products</h2>
+      <a href="#catalog">View all</a>
+    </div>
+    <div class="merch-row">
+      <button class="merch-arrow prev" type="button" onclick="merchScroll(this,-1)" aria-label="Previous">‹</button>
+      <div class="merch-track" id="newLaunched"></div>
+      <button class="merch-arrow next" type="button" onclick="merchScroll(this,1)" aria-label="Next">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- SEO links -->
+<section class="merch-seo">
+  <div class="container">
+    <h3>Helmets</h3>
+    <div class="merch-seo-grid" id="helmetSeoLinks"></div>
+  </div>
+</section>
+
+<!-- Catalog -->
+<section class="merch-catalog" id="catalog">
+  <div class="container">
+    <div class="merch-section-head">
+      <div>
+        <h2 id="catalogTitle">All Merchandise</h2>
+        <p class="merch-catalog-sub" id="catalogSub"></p>
+      </div>
+    </div>
+    <div class="merch-catalog-grid" id="catalogGrid"></div>
+    <div class="merch-empty" id="catalogEmpty" hidden>
+      <p>No products found in this category.</p>
+      <a href="merchandise.html">View all merchandise</a>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome("merchandise");
+
+const searchInput = document.getElementById("headerSearch");
+if(searchInput) searchInput.placeholder = "Search for collections";
+
+const params = new URLSearchParams(location.search);
+const state = { cat: params.get("cat") || "" };
+
+document.getElementById("merchCategories").innerHTML = MERCH_CATEGORIES.map(c => `
+  <a href="category.html?slug=${c.slug}" class="merch-cat-card">
+    <img src="${c.img}" alt="${c.name}">
+    <span class="merch-cat-label">${c.name} <span class="merch-cat-plus">+</span></span>
+  </a>`).join("");
+
+const bestList = [...MERCH_PRODUCTS].sort((a, b) => b.reviews - a.reviews);
+const newList = MERCH_PRODUCTS.filter(p => p.tag && /new/i.test(p.tag));
+const fallbackNew = MERCH_PRODUCTS.slice(0, 4);
+
+document.getElementById("bestSellers").innerHTML = bestList.map(merchandiseCard).join("");
+document.getElementById("newLaunched").innerHTML = (newList.length ? newList : fallbackNew).map(merchandiseCard).join("");
+
+document.getElementById("helmetSeoLinks").innerHTML = HELMET_SEO_LINKS.map(label => {
+  const slug = label.toLowerCase().replace(/\s+/g, "-");
+  return `<a href="merchandise.html?cat=helmets&amp;q=${encodeURIComponent(label)}#catalog">${label}</a>`;
+}).join("");
+
+function filterMerch(){
+  let list = [...MERCH_PRODUCTS];
+  if(state.cat) list = list.filter(p => p.merchCat === state.cat);
+  const q = (params.get("q") || "").trim().toLowerCase();
+  if(q) list = list.filter(p => p.name.toLowerCase().includes(q) || q.includes("helmet"));
+  return list;
+}
+
+function renderCatalog(){
+  const list = filterMerch();
+  const titles = { helmets:"Helmets", urban:"Urban Wear", riding:"Riding Gear", kids:"Kids Wear" };
+  document.getElementById("catalogTitle").textContent = state.cat ? (titles[state.cat] || "Merchandise") : "All Merchandise";
+  document.getElementById("catalogSub").textContent = `${list.length} product${list.length !== 1 ? "s" : ""}`;
+  const empty = document.getElementById("catalogEmpty");
+  const grid = document.getElementById("catalogGrid");
+  if(!list.length){
+    grid.innerHTML = "";
+    empty.hidden = false;
+    return;
+  }
+  empty.hidden = true;
+  grid.innerHTML = list.map(merchandiseCard).join("");
+}
+
+function merchScroll(btn, dir){
+  const track = btn.closest(".merch-row").querySelector(".merch-track");
+  if(track) track.scrollBy({ left: dir * 260, behavior: "smooth" });
+}
+
+renderCatalog();
+
+if(params.get("cat") || params.get("q") || location.hash === "#catalog"){
+  setTimeout(() => document.getElementById("catalog").scrollIntoView({ behavior: "smooth", block: "start" }), 300);
+}
+</script>
+</body>
+</html>

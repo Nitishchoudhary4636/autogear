@@ -3,48 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Login — AutoGear</title>
-<link rel="icon" href="images/logo.png">
+<title>Sign In</title>
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0757/0722/0250/files/faveicon.png?v=1726735244&amp;crop=center&amp;width=32&amp;height=32">
+<link rel="shortcut icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0757/0722/0250/files/faveicon.png?v=1726735244&amp;crop=center&amp;width=32&amp;height=32">
 <link rel="stylesheet" href="css/style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-<div id="header"></div>
-<div class="auth-wrap">
-  <div class="auth">
-    <h1>Welcome back</h1>
-    <p class="sub">Login to access your account, orders and wishlist.</p>
+<body class="auth-shop-page">
+
+<div class="auth-shop-wrap">
+  <div class="auth-shop">
+    <div class="auth-shop-logo"></div>
+
+    <h1 id="authTitle">Sign in</h1>
+    <p class="sub" id="authSub">Sign in or create an account</p>
+
     <div class="alert err" id="err"></div>
-    <form id="form">
-      <div class="field"><label>Email</label><input type="email" id="email" required></div>
-      <div class="field"><label>Password</label><input type="password" id="pwd" required></div>
-      <label style="display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13.5px;color:var(--muted)">
-        <input type="checkbox" id="remember" checked> Remember me
-      </label>
-      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-    </form>
-    <p class="alt">New to AutoGear? <a href="signup.html">Create an account</a></p>
+
+    <div id="stepEmail">
+      <button type="button" class="auth-shop-continue" id="shopBtn">Continue with shop</button>
+      <div class="auth-shop-or">or</div>
+      <form id="emailForm">
+        <div class="auth-email-wrap">
+          <input type="email" id="email" placeholder="Email" autocomplete="email" required>
+          <button type="submit" class="auth-email-arrow" aria-label="Continue">→</button>
+        </div>
+        <label class="auth-check">
+          <input type="checkbox" id="newsletter" checked>
+          <span>Email me with news and offers</span>
+        </label>
+        <p class="auth-terms">By continuing, you agree to our <a href="contact.html">Terms of service</a></p>
+      </form>
+    </div>
+
+    <div id="stepPassword" hidden>
+      <button type="button" class="auth-back" id="backFromLogin">← Back</button>
+      <p class="auth-email-chip" id="loginEmailChip"></p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="pwd">Password</label>
+          <input type="password" id="pwd" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="auth-shop-continue">Sign in</button>
+      </form>
+    </div>
+
+    <div id="stepRegister" hidden>
+      <button type="button" class="auth-back" id="backFromRegister">← Back</button>
+      <p class="auth-email-chip" id="registerEmailChip"></p>
+      <form id="registerForm">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input type="text" id="name" placeholder="Your name" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="newPwd">Create password</label>
+          <input type="password" id="newPwd" placeholder="Min. 6 characters" minlength="6" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="confirmPwd">Confirm password</label>
+          <input type="password" id="confirmPwd" placeholder="Re-enter password" minlength="6" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="auth-shop-continue">Create account</button>
+      </form>
+    </div>
   </div>
+
+  <p class="auth-privacy"><a href="contact.html">Privacy policy</a></p>
 </div>
-<div id="footer"></div>
+
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 <script>
-mountChrome();
-document.getElementById("form").onsubmit = e=>{
+document.querySelector(".auth-shop-logo").innerHTML = siteLogoImg(130, 28);
+
+const params = new URLSearchParams(location.search);
+const returnTo = params.get("return") || "index.html";
+let pendingEmail = "";
+
+const err = document.getElementById("err");
+const stepEmail = document.getElementById("stepEmail");
+const stepPassword = document.getElementById("stepPassword");
+const stepRegister = document.getElementById("stepRegister");
+const authTitle = document.getElementById("authTitle");
+const authSub = document.getElementById("authSub");
+
+function showErr(msg){
+  err.textContent = msg;
+  err.classList.add("show");
+}
+function clearErr(){
+  err.textContent = "";
+  err.classList.remove("show");
+}
+
+function showStep(step){
+  clearErr();
+  stepEmail.hidden = step !== "email";
+  stepPassword.hidden = step !== "password";
+  stepRegister.hidden = step !== "register";
+  if(step === "email"){
+    authTitle.textContent = "Sign in";
+    authSub.textContent = "Sign in or create an account";
+  } else if(step === "password"){
+    authTitle.textContent = "Welcome back";
+    authSub.textContent = "Enter your password to sign in";
+    document.getElementById("loginEmailChip").textContent = pendingEmail;
+    document.getElementById("pwd").value = "";
+    setTimeout(() => document.getElementById("pwd").focus(), 50);
+  } else {
+    authTitle.textContent = "Create account";
+    authSub.textContent = "Set up your new TVS account";
+    document.getElementById("registerEmailChip").textContent = pendingEmail;
+    document.getElementById("name").value = "";
+    document.getElementById("newPwd").value = "";
+    document.getElementById("confirmPwd").value = "";
+    setTimeout(() => document.getElementById("name").focus(), 50);
+  }
+}
+
+function goAfterAuth(name){
+  toast("Welcome" + (name ? ", " + name : "") + "!");
+  setTimeout(() => location.href = returnTo, 700);
+}
+
+document.getElementById("shopBtn").addEventListener("click", () => {
+  continueWithShop();
+  goAfterAuth("Shop Customer");
+});
+
+document.getElementById("emailForm").addEventListener("submit", e => {
   e.preventDefault();
-  const email = document.getElementById("email").value.trim().toLowerCase();
-  const pwd = document.getElementById("pwd").value;
-  const remember = document.getElementById("remember").checked;
-  const err = document.getElementById("err");
-  const user = getUsers().find(u=>u.email===email && u.password===pwd);
-  if(!user){ err.textContent="Invalid email or password."; err.classList.add("show"); return; }
-  const session = JSON.stringify({name:user.name, email:user.email});
-  if(remember) localStorage.setItem(SESSION_KEY, session);
-  else sessionStorage.setItem(SESSION_KEY, session);
-  toast("Welcome back, "+user.name+"!");
-  setTimeout(()=>location.href="index.html", 700);
-};
+  clearErr();
+  pendingEmail = document.getElementById("email").value.trim().toLowerCase();
+  if(!pendingEmail){ showErr("Please enter your email."); return; }
+  if(findUserByEmail(pendingEmail)) showStep("password");
+  else showStep("register");
+});
+
+document.getElementById("backFromLogin").addEventListener("click", () => showStep("email"));
+document.getElementById("backFromRegister").addEventListener("click", () => showStep("email"));
+
+document.getElementById("loginForm").addEventListener("submit", e => {
+  e.preventDefault();
+  clearErr();
+  const user = loginWithEmail(pendingEmail, document.getElementById("pwd").value, true);
+  if(!user){ showErr("Incorrect password. Please try again."); return; }
+  goAfterAuth(user.name);
+});
+
+document.getElementById("registerForm").addEventListener("submit", e => {
+  e.preventDefault();
+  clearErr();
+  const pwd = document.getElementById("newPwd").value;
+  const cpwd = document.getElementById("confirmPwd").value;
+  if(pwd !== cpwd){ showErr("Passwords do not match."); return; }
+  const result = registerWithEmail(
+    document.getElementById("name").value,
+    pendingEmail,
+    pwd,
+    { newsletter: document.getElementById("newsletter").checked }
+  );
+  if(!result.ok){ showErr(result.error); return; }
+  goAfterAuth(result.user.name);
+});
+
+if(currentUser()) location.replace(returnTo);
 </script>
 </body>
 </html>

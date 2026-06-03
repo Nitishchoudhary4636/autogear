@@ -4,75 +4,286 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Product — AutoGear</title>
-<link rel="icon" href="images/logo.png">
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0757/0722/0250/files/faveicon.png?v=1726735244&amp;crop=center&amp;width=32&amp;height=32">
 <link rel="stylesheet" href="css/style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="tvs-pdp-page">
 <div id="header"></div>
 
-<div class="container">
-  <div class="pdp" id="pdp"></div>
-
-  <section class="block">
-    <div class="section-head"><div><h2>You may also like</h2></div></div>
-    <div class="grid" id="related"></div>
-  </section>
-</div>
+<div class="container tvs-pdp-wrap" id="pdpRoot"></div>
 
 <div id="footer"></div>
+
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 <script>
-mountChrome("shop");
+mountChrome("accessories");
 
-const id = parseInt(new URLSearchParams(location.search).get("id")) || 1;
-const p = PRODUCTS.find(x=>x.id===id) || PRODUCTS[0];
+const id = parseInt(new URLSearchParams(location.search).get("id"), 10) || 1;
+const p = PRODUCTS.find(x => x.id === id) || PRODUCTS[0];
 document.title = p.name + " — AutoGear";
 
-const stars = "★".repeat(Math.round(p.rating)) + "☆".repeat(5-Math.round(p.rating));
-const wishActive = getWish().includes(p.id) ? "active":"";
+const priceInr = toINR(p.price);
+const mrpInr = p.old ? toINR(p.old) : Math.round(priceInr * 1.15);
+const discountPct = p.old ? Math.round((1 - p.price / p.old) * 100) : Math.round((1 - priceInr / mrpInr) * 100);
+const partNo = "K" + String(2220000 + p.id * 420).slice(0, 7);
 
-document.getElementById("pdp").innerHTML = `
-  <div>
-    <div class="pdp-img"><img src="${p.img}" alt="${p.name}"></div>
-    <div class="thumbs">
-      <div><img src="${p.img}"></div>
-      <div><img src="${p.img}" style="filter:hue-rotate(20deg)"></div>
-      <div><img src="${p.img}" style="filter:brightness(0.85)"></div>
-      <div><img src="${p.img}" style="filter:contrast(1.2)"></div>
-    </div>
-  </div>
-  <div>
-    <div class="crumbs"><a href="index.html">Home</a> / <a href="shop.html?cat=${p.category}">${p.category}</a></div>
-    <h1>${p.name}</h1>
-    <div class="rating" style="font-size:15px">${stars}<span>(${p.reviews} reviews)</span></div>
-    <div class="price">${formatINR(toINR(p.price))} ${p.old?`<del style="font-size:18px;color:var(--muted)">${formatINR(toINR(p.old))}</del>`:""}</div>
-    <p class="desc">${p.desc}</p>
-    <div class="pdp-actions">
-      <div class="qty">
-        <button onclick="adjQty(-1)">−</button>
-        <input id="qty" value="1" readonly>
-        <button onclick="adjQty(1)">+</button>
-      </div>
-      <button class="btn btn-primary" onclick="addToCart(${p.id}, parseInt(document.getElementById('qty').value))">Add to Cart</button>
-      <button class="btn btn-ghost ${wishActive}" id="wishBtn" onclick="toggleWish(${p.id});this.classList.toggle('active')">♥ Wishlist</button>
-    </div>
-    <div class="specs">
-      <h3 style="margin-bottom:14px;font-size:18px">Specifications</h3>
-      <table><tbody>
-        ${Object.entries(p.specs).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
-      </tbody></table>
-    </div>
-  </div>
-`;
-function adjQty(d){
-  const q = document.getElementById("qty");
-  q.value = Math.max(1, parseInt(q.value)+d);
+function tvsPrice(amount){
+  return "₹ " + Number(amount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// Related
-document.getElementById("related").innerHTML = PRODUCTS.filter(x=>x.id!==p.id).slice(0,4).map(productCard).join("");
+function stars(n){
+  const r = Math.round(n);
+  return "★".repeat(r) + "☆".repeat(5 - r);
+}
+
+function ratingBars(avg){
+  const weights = [0.04, 0.06, 0.1, 0.22, 0.58];
+  if(avg >= 4.8) weights[4] = 0.78;
+  else if(avg >= 4.5) weights[4] = 0.65;
+  return [5, 4, 3, 2, 1].map(star => {
+    const pct = Math.round(weights[5 - star] * 100);
+    return `<div class="tvs-bar-row"><span>${star}</span><div class="bar"><span style="width:${pct}%"></span></div><span>${pct}%</span></div>`;
+  }).join("");
+}
+
+const related = PRODUCTS.filter(x => x.id !== p.id);
+const fbtItems = [p, ...related.filter(x => x.category === p.category).slice(0, 2)];
+if(fbtItems.length < 3) fbtItems.push(...related.filter(x => !fbtItems.includes(x)).slice(0, 3 - fbtItems.length));
+
+const productReviews = CUSTOMER_REVIEWS.filter(r => r.product === p.name);
+const reviews = productReviews.length ? productReviews : [
+  { name:"Verified Buyer", title:"Perfect fit", rating:5, text:"Good quality product. Fits well and looks exactly like the pictures.", date:"2 weeks ago", verified:true },
+  { name:"Rahul K.", title:"Happy purchase", rating:Math.round(p.rating), text:"Happy with the purchase. Delivery was quick and packaging was secure.", date:"1 month ago", verified:true },
+  { name:"Meera S.", title:"Value for money", rating:4, text:"Value for money. Would recommend for daily use.", date:"2 months ago", verified:false }
+];
+
+const features = Object.entries(p.specs).map(([, v]) => v);
+
+document.getElementById("pdpRoot").innerHTML = `
+  <nav class="tvs-breadcrumbs" aria-label="Breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="tvs-bc-sep">›</span>
+    <a href="shop.html">Accessories</a>
+    <span class="tvs-bc-sep">›</span>
+    <span>${p.name}</span>
+  </nav>
+
+  <div class="tvs-pdp-main">
+    <div class="tvs-pdp-gallery">
+      <div class="tvs-pdp-main-img">
+        <img id="mainImg" src="${p.img}" alt="${p.name}">
+      </div>
+    </div>
+
+    <div class="tvs-pdp-info">
+      <h1 class="tvs-pdp-title">${p.name}</h1>
+
+      <div class="tvs-pdp-meta-top">
+        <span class="tvs-in-stock">In Stock</span>
+        <div class="tvs-pdp-rating">
+          <span class="tvs-pdp-stars">${stars(p.rating)}</span>
+          <a href="#reviews">${p.reviews} Reviews</a>
+        </div>
+      </div>
+
+      <div class="tvs-price-row">
+        <span class="tvs-pdp-price">${tvsPrice(priceInr)}</span>
+        <span class="tvs-pdp-mrp-strike">${tvsPrice(mrpInr)}</span>
+        <span class="tvs-pdp-off-tag">${discountPct}% OFF</span>
+      </div>
+      <div class="tvs-pdp-mrp">M.R.P (Inclusive of all taxes)</div>
+      <div class="tvs-pdp-part">Part No: ${partNo}</div>
+
+      <div class="tvs-offers-banner">Get 10% off on your first order. Use code: <strong>AGFIRST10</strong></div>
+
+      <div class="tvs-delivery-box">
+        <label for="pincode">Delivery To</label>
+        <div class="tvs-delivery-row">
+          <input id="pincode" type="text" inputmode="numeric" maxlength="6" placeholder="Enter Pincode">
+          <button type="button" class="tvs-check-btn" id="checkDelivery">Check</button>
+        </div>
+        <p class="tvs-delivery-msg" id="deliveryMsg"></p>
+      </div>
+
+      <div class="tvs-trust-row">
+        <div class="tvs-trust-item"><span class="tvs-trust-ico">✓</span>100% Genuine Products</div>
+        <div class="tvs-trust-item"><span class="tvs-trust-ico">↺</span>Easy Returns</div>
+        <div class="tvs-trust-item"><span class="tvs-trust-ico">🔒</span>Secure Payments</div>
+      </div>
+
+      <div class="tvs-buy-stack">
+        <button type="button" class="tvs-buy-now" onclick="buyNow(${p.id})">Buy Now</button>
+        <div class="tvs-cart-row">
+          <div class="tvs-qty">
+            <button type="button" onclick="adjQty(-1)" aria-label="Decrease quantity">−</button>
+            <input id="qty" value="1" readonly aria-label="Quantity">
+            <button type="button" onclick="adjQty(1)" aria-label="Increase quantity">+</button>
+          </div>
+          <button type="button" class="tvs-add-cart" onclick="addToCart(${p.id}, getQty())">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="tvs-pdp-meta-links">
+        <a href="#" onclick="event.preventDefault();toast('EMI options available on orders above ₹3,000')">EMI</a>
+        <span class="tvs-link-sep">|</span>
+        <a href="#" onclick="event.preventDefault();toast('Bank offers &amp; coupon codes at checkout')">Offers</a>
+        <a class="tvs-wa-link" href="https://wa.me/?text=${encodeURIComponent('Hi, I want to know about ' + p.name)}" target="_blank" rel="noopener">
+          <span class="tvs-wa">✆</span> Chat with us
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="tvs-accordions tvs-accordions-full">
+    <details class="tvs-acc" open>
+      <summary>Description</summary>
+      <div class="tvs-acc-body"><p>${p.desc}</p><p>Engineered for durability and precise fitment. Built with premium materials to withstand daily use and harsh weather conditions.</p></div>
+    </details>
+    <details class="tvs-acc">
+      <summary>Shipping Details</summary>
+      <div class="tvs-acc-body">
+        <p>Standard delivery in 3–5 business days. Express delivery available in select pin codes. Free shipping on orders above ₹8,000.</p>
+      </div>
+    </details>
+    <details class="tvs-acc">
+      <summary>Features</summary>
+      <div class="tvs-acc-body"><ul>${features.map(f => `<li>${f}</li>`).join("")}</ul></div>
+    </details>
+    <details class="tvs-acc">
+      <summary>Legal Metrology</summary>
+      <div class="tvs-acc-body">
+        <table class="tvs-acc-table">
+          <tr><td>Product Name</td><td>${p.name}</td></tr>
+          <tr><td>Net Quantity</td><td>1 Unit</td></tr>
+          <tr><td>M.R.P</td><td>${tvsPrice(mrpInr)} (Inclusive of all taxes)</td></tr>
+          <tr><td>Manufactured / Packed By</td><td>AutoGear Industries Pvt. Ltd.</td></tr>
+        </table>
+      </div>
+    </details>
+    <details class="tvs-acc">
+      <summary>Country of Origin</summary>
+      <div class="tvs-acc-body"><p>India</p></div>
+    </details>
+    <details class="tvs-acc">
+      <summary>Manufacturer</summary>
+      <div class="tvs-acc-body">
+        <p><strong>AutoGear Industries Pvt. Ltd.</strong><br>
+        1245 Speedway Drive, Detroit, MI 48226, USA<br>
+        Email: support@autogear.com · Phone: +1 (800) 555-GEAR</p>
+      </div>
+    </details>
+    <details class="tvs-acc">
+      <summary>Specifications</summary>
+      <div class="tvs-acc-body">
+        <table class="tvs-acc-table">
+          ${Object.entries(p.specs).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
+        </table>
+      </div>
+    </details>
+  </div>
+
+  <section class="tvs-section">
+    <h2>Frequently Bought Together <span class="tvs-section-sub">(Save up to 10% OFF)</span></h2>
+    <div class="tvs-fbt" id="fbtBox">
+      ${fbtItems.map((item, i) => `
+        ${i ? `<span class="tvs-fbt-plus">+</span>` : ""}
+        <div class="tvs-fbt-item">
+          <label>
+            <input type="checkbox" class="fbt-check" data-id="${item.id}" data-price="${item.price}" ${item.id === p.id ? "checked disabled" : "checked"}>
+            <img src="${item.img}" alt="">
+            <span><strong>${item.name}</strong>${tvsPrice(toINR(item.price))}</span>
+          </label>
+        </div>`).join("")}
+      <div class="tvs-fbt-total">
+        <span class="tvs-fbt-label">Total price</span>
+        <strong id="fbtTotal">${tvsPrice(priceInr)}</strong>
+        <button type="button" class="tvs-add-cart tvs-fbt-btn" onclick="addFbtToCart()">Add all to cart</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="tvs-section">
+    <div class="acc-section-head">
+      <h2>You may also like...</h2>
+      <a href="shop.html">View All →</a>
+    </div>
+    <div class="acc-row">
+      <button class="acc-arrow prev" type="button" onclick="accScroll(this,-1)">‹</button>
+      <div class="acc-track">${related.slice(0, 8).map(accessoryCard).join("")}</div>
+      <button class="acc-arrow next" type="button" onclick="accScroll(this,1)">›</button>
+    </div>
+  </section>
+
+  <section class="tvs-section tvs-reviews-section" id="reviews">
+    <div class="tvs-reviews-head">
+      <div>
+        <h2>Customer Reviews</h2>
+        <p class="tvs-reviews-count">${p.reviews} (Reviews &amp; Ratings)</p>
+      </div>
+      <button type="button" class="tvs-write-review" onclick="toast('Review form opens after purchase (demo)')">Write a Review</button>
+    </div>
+    <div class="tvs-reviews-layout">
+      <div class="tvs-review-summary">
+        <div class="tvs-review-big">${p.rating.toFixed(1)}<span>/5</span></div>
+        <div class="tvs-pdp-stars tvs-review-stars">${stars(p.rating)}</div>
+        <div class="tvs-verified-pill">Verified</div>
+        <div class="tvs-review-bars">${ratingBars(p.rating)}</div>
+      </div>
+      <div class="tvs-review-list">
+        ${reviews.map(r => `
+          <article class="tvs-review-item">
+            <div class="tvs-review-item-head">
+              <div class="stars">${stars(r.rating)}</div>
+              ${r.verified ? `<span class="tvs-verified-pill sm">Verified Buyer</span>` : ""}
+            </div>
+            <div class="meta">${r.name}${r.date ? " · " + r.date : ""}</div>
+            ${r.title ? `<h4 class="tvs-review-title">${r.title}</h4>` : ""}
+            <p>${r.text}</p>
+          </article>`).join("")}
+      </div>
+    </div>
+  </section>
+`;
+
+function adjQty(d){
+  const q = document.getElementById("qty");
+  q.value = Math.max(1, parseInt(q.value, 10) + d);
+}
+function getQty(){ return parseInt(document.getElementById("qty").value, 10) || 1; }
+function buyNow(pid){
+  addToCart(pid, getQty(), false);
+  openCheckoutModal();
+}
+function updateFbtTotal(){
+  let sum = 0;
+  document.querySelectorAll(".fbt-check:checked").forEach(el => { sum += parseFloat(el.dataset.price); });
+  document.getElementById("fbtTotal").textContent = tvsPrice(toINR(sum));
+}
+function addFbtToCart(){
+  document.querySelectorAll(".fbt-check:checked").forEach(el => addToCart(parseInt(el.dataset.id, 10), 1, false));
+  openCartDrawer();
+}
+document.querySelectorAll(".fbt-check").forEach(el => el.addEventListener("change", updateFbtTotal));
+updateFbtTotal();
+
+document.getElementById("checkDelivery").addEventListener("click", () => {
+  const pin = document.getElementById("pincode").value.trim();
+  const msg = document.getElementById("deliveryMsg");
+  if(!/^\d{6}$/.test(pin)){
+    toast("Enter a valid 6-digit pincode");
+    msg.classList.remove("show", "error");
+    return;
+  }
+  msg.textContent = "Delivery available by " + (parseInt(pin.slice(-1)) % 2 ? "Friday" : "Thursday") + " · Standard shipping ₹49 (Free above ₹8,000)";
+  msg.classList.add("show");
+  msg.classList.remove("error");
+});
 </script>
+
+<button type="button" class="tvs-chat-float" onclick="toast('Chat support — demo')" aria-label="Chat with us">
+  <span class="tvs-chat-ico">💬</span> Chat
+</button>
 </body>
 </html>

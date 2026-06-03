@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Offer Zone — TVS Motor Company</title>
+<meta name="description" content="TVS Offer Zone — limited-time deals on accessories, parts and riding gear.">
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0757/0722/0250/files/faveicon.png?v=1726735244&amp;crop=center&amp;width=32&amp;height=32">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="acc-page offer-page">
+<div id="header"></div>
+
+<section class="acc-hero offer-hero">
+  <img src="https://shop.tvsmotor.com/cdn/shop/files/1440x300-min_e18091c5-06d3-42e3-9769-840fbcdee4ce.jpg?v=1722921064" alt="TVS Offer Zone">
+  <div class="offer-hero-badge">Get Upto 30% OFF Site-Wide</div>
+</section>
+
+<section class="acc-section">
+  <div class="container">
+    <div class="acc-section-head">
+      <h2>Popular Products</h2>
+      <a href="#catalog">View All →</a>
+    </div>
+    <div class="acc-row">
+      <button class="acc-arrow prev" type="button" onclick="accScroll(this,-1)">‹</button>
+      <div class="acc-track" id="onSale"></div>
+      <button class="acc-arrow next" type="button" onclick="accScroll(this,1)">›</button>
+    </div>
+  </div>
+</section>
+
+<section class="acc-section alt">
+  <div class="container">
+    <div class="acc-section-head">
+      <h2>Trending Deals</h2>
+      <a href="#catalog">View All →</a>
+    </div>
+    <div class="acc-row">
+      <button class="acc-arrow prev" type="button" onclick="accScroll(this,-1)">‹</button>
+      <div class="acc-track" id="trendingDeals"></div>
+      <button class="acc-arrow next" type="button" onclick="accScroll(this,1)">›</button>
+    </div>
+  </div>
+</section>
+
+<section class="acc-section">
+  <div class="container">
+    <div class="offer-deal-banners">
+      <a href="#catalog" class="offer-deal-card">
+        <span class="offer-deal-tag">Lighting</span>
+        <strong>Lighting Offers</strong>
+        <span>Up to 30% off LED &amp; bulbs</span>
+      </a>
+      <a href="#catalog" class="offer-deal-card">
+        <span class="offer-deal-tag">Electronics</span>
+        <strong>Electronics Deals</strong>
+        <span>Dashcams, stereos &amp; more</span>
+      </a>
+      <a href="#catalog" class="offer-deal-card">
+        <span class="offer-deal-tag">Interior</span>
+        <strong>Interior Savings</strong>
+        <span>Seat covers, mats &amp; comfort</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="acc-catalog" id="catalog">
+  <div class="container">
+    <div class="acc-catalog-head">
+      <h2 id="catalogTitle">On Sale</h2>
+      <p id="catalogSub">Limited-time offers on genuine TVS accessories.</p>
+    </div>
+    <div class="acc-filter-bar" id="filterBar"></div>
+    <div class="acc-catalog-grid" id="catalogGrid"></div>
+    <div class="empty plp-empty" id="catalogEmpty" style="margin-top:20px">
+      <div class="ico">🏷️</div>
+      <h3>No offers right now</h3>
+      <p>Check back soon for new deals.</p>
+      <a href="shop.html" class="btn btn-primary">Browse Accessories</a>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+mountChrome("offer");
+
+const params = new URLSearchParams(location.search);
+const state = {
+  cat: params.get("cat") || "",
+  q: (params.get("q") || "").trim().toLowerCase()
+};
+
+const ACCESSORY_PRODUCTS = PRODUCTS.filter(p => p.id <= 100);
+const PRODUCT_CATS = [...new Set(ACCESSORY_PRODUCTS.filter(p => p.old).map(p => p.category))];
+const saleList = ACCESSORY_PRODUCTS.filter(p => p.old);
+const trendingDeals = [...saleList].sort((a, b) => b.reviews - a.reviews);
+
+document.getElementById("onSale").innerHTML = (saleList.length ? saleList : ACCESSORY_PRODUCTS).map(accessoryCard).join("");
+document.getElementById("trendingDeals").innerHTML = (trendingDeals.length ? trendingDeals : ACCESSORY_PRODUCTS.slice(0, 6)).map(accessoryCard).join("");
+
+function filterOffers(){
+  let list = saleList.length ? [...saleList] : [...ACCESSORY_PRODUCTS];
+  if(state.cat){
+    list = list.filter(p => p.category.toLowerCase() === state.cat.toLowerCase());
+  }
+  if(state.q){
+    list = list.filter(p =>
+      p.name.toLowerCase().includes(state.q) ||
+      p.category.toLowerCase().includes(state.q)
+    );
+  }
+  list.sort((a, b) => {
+    const offA = a.old ? (1 - a.price / a.old) : 0;
+    const offB = b.old ? (1 - b.price / b.old) : 0;
+    return offB - offA;
+  });
+  return list;
+}
+
+function renderCatalog(){
+  const list = filterOffers();
+  const title = document.getElementById("catalogTitle");
+  const sub = document.getElementById("catalogSub");
+  const empty = document.getElementById("catalogEmpty");
+
+  if(state.q){
+    title.textContent = `Search: "${params.get("q")}"`;
+    sub.textContent = `${list.length} offer${list.length !== 1 ? "s" : ""} found`;
+  } else if(state.cat){
+    title.textContent = `${state.cat} Offers`;
+    sub.textContent = `${list.length} product${list.length !== 1 ? "s" : ""} on sale`;
+  } else {
+    title.textContent = "On Sale";
+    sub.textContent = `${list.length} limited-time offer${list.length !== 1 ? "s" : ""}`;
+  }
+
+  document.getElementById("filterBar").innerHTML = `
+    <button type="button" data-cat="" class="${!state.cat ? "active" : ""}">All Deals</button>
+    ${PRODUCT_CATS.map(c => `<button type="button" data-cat="${c}" class="${state.cat === c ? "active" : ""}">${c}</button>`).join("")}`;
+
+  if(!list.length){
+    document.getElementById("catalogGrid").innerHTML = "";
+    empty.classList.add("show");
+    return;
+  }
+  empty.classList.remove("show");
+  document.getElementById("catalogGrid").innerHTML = list.map(accessoryCard).join("");
+}
+
+document.getElementById("filterBar").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-cat]");
+  if(!btn) return;
+  state.cat = btn.dataset.cat;
+  history.replaceState(null, "", state.cat ? `offer-zone.html?cat=${encodeURIComponent(state.cat)}#catalog` : "offer-zone.html#catalog");
+  renderCatalog();
+});
+
+renderCatalog();
+
+if(params.toString() || location.hash === "#catalog"){
+  setTimeout(() => document.getElementById("catalog").scrollIntoView({ behavior: "smooth", block: "start" }), 300);
+}
+</script>
+</body>
+</html>
