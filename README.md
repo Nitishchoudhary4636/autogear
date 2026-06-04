@@ -1,4 +1,4 @@
-# AutoGear - Premium Vehicle Accessories
+# TVS Motors — Official Online Store
 
 A complete, production-ready multi-page e-commerce website built with pure HTML, CSS, and vanilla JavaScript. No build step, no dependencies.
 
@@ -33,4 +33,4 @@ netlify deploy --dir=. --prod
 or just drag the folder into Netlify Drop.
 
 ## Brand
-AutoGear - vehicle accessories company. Orange/black premium automotive aesthetic.
+TVS Motors — official TVS accessories, riding gear and merchandise store.

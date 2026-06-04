@@ -70,7 +70,7 @@ function loginWithPhone(phone){
   const match = users.find(u => u.phone === digits || (u.email && u.email.startsWith(digits + "@")));
   const user = match
     ? { name: match.name, email: match.email, phone: digits }
-    : { name: "Customer", email: digits + "@guest.autogear.local", phone: digits };
+    : { name: "Customer", email: digits + "@guest.tvsmotor.local", phone: digits };
   setSession(user);
   return true;
 }
@@ -226,7 +226,7 @@ function renderCartDrawer(){
           <img src="${item.img}" alt="${item.name}">
         </a>
         <div class="ag-cart-item-info">
-          <span class="ag-cart-item-brand">AutoGear</span>
+          <span class="ag-cart-item-brand">TVS Motors</span>
           <a href="pdp.html?id=${item.id}" class="ag-cart-item-name" onclick="closeCartDrawer()">${item.name}</a>
           <div class="ag-cart-item-prices">
             <span class="ag-cart-item-price">${formatTVSPrice(toINR(item.price))}</span>${old}
@@ -443,7 +443,7 @@ function renderCheckoutLogin(state){
       <input type="tel" id="checkoutPhone" inputmode="numeric" maxlength="10" placeholder="Mobile number" autocomplete="tel">
     </div>
     <div class="ag-co-trust">
-      <span class="ag-co-trust-brand">Powered by AutoGear Pay</span>
+      <span class="ag-co-trust-brand">Powered by TVS Motors</span>
       <div class="ag-co-trust-badges">
         <span>PCI DSS</span>
         <span>Secured Payments</span>
@@ -516,7 +516,7 @@ function renderCheckoutModal(){
   foot.innerHTML = `
     <label class="ag-co-offers"><input type="checkbox" id="coOffers" checked> Send me order updates &amp; offers — (no spam)</label>
     <button type="button" class="ag-co-continue" id="checkoutContinueBtn">${btnLabel}</button>
-    <p class="ag-co-legal">By proceeding, I agree to AutoGear's <a href="#">Privacy Policy</a> and <a href="#">T&amp;C</a></p>`;
+    <p class="ag-co-legal">By proceeding, I agree to TVS Motors' <a href="#">Privacy Policy</a> and <a href="#">T&amp;C</a></p>`;
 
   document.getElementById("checkoutContinueBtn").addEventListener("click", checkoutContinue);
 
@@ -708,7 +708,7 @@ function buildHeader(active){
       <div class="container ag-nav-inner">
         <nav class="ag-nav" aria-label="Main">${navItems.map(navLink).join("")}</nav>
         <div class="ag-nav-brand">
-          <span class="ag-racing">AutoGear</span>
+          <span class="ag-racing">TVS Motors</span>
           <span class="ag-racing-x">×</span>
           <span class="ag-racing-partner">Racing</span>
         </div>
@@ -845,7 +845,7 @@ function buildFooter(){
             <li><a href="#" class="menu-link">Warranty</a></li>
             <li><a href="#" class="menu-link">Size Guide</a></li>
             <li><a href="#" class="menu-link">FAQ</a></li>
-            <li><a href="index.html" class="menu-link">About AutoGear</a></li>
+            <li><a href="index.html" class="menu-link">About TVS Motors</a></li>
             <li><a href="#" class="menu-link">Blog</a></li>
           </ul>
         </div>
@@ -853,7 +853,7 @@ function buildFooter(){
 
       <!-- Footer Bottom -->
       <div class="f-bottom">
-        <span style="color:var(--muted);font-size:13px">© ${new Date().getFullYear()} AutoGear Industries. All rights reserved.</span>
+        <span style="color:var(--muted);font-size:13px">© ${new Date().getFullYear()} TVS Motor Company. All rights reserved.</span>
         <div style="display:flex;gap:20px;color:var(--muted);font-size:13px">
           <a href="#" style="color:var(--muted);text-decoration:none">Privacy Policy</a>
           <a href="#" style="color:var(--muted);text-decoration:none">Terms & Conditions</a>

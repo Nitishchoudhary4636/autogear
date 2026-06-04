@@ -1,4 +1,4 @@
-// AutoGear product catalog
+// TVS Motors product catalog
 const PRODUCTS = [
   { id:1, name:"Premium Leather Seat Cover Set", category:"Interior", price:129.99, old:179.99, img:"images/p1.jpg", rating:4.7, reviews:184, tag:"BESTSELLER",
     desc:"Hand-stitched genuine leather seat covers designed for premium comfort and a luxury cabin look. Universal fit for most sedans and SUVs.",
