@@ -63,8 +63,11 @@
 
 <div id="footer"></div>
 
+<script>window.dataLayer=window.dataLayer||[];</script>
+<script src="js/mcp-datalayer.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="js/styler-sitemap.js" defer></script>
 <script>
 mountChrome("kids");
 
@@ -115,10 +118,12 @@ function renderKids(){
     grid.innerHTML = "";
     empty.hidden = false;
     document.getElementById("kidsPagination").innerHTML = "";
+    if(typeof pushMcpCategoryPage === "function") pushMcpCategoryPage("kids_wear", "Kids Wear", list);
     return;
   }
   empty.hidden = true;
   grid.innerHTML = pageItems.map(kidsWearCard).join("");
+  if(typeof pushMcpCategoryPage === "function") pushMcpCategoryPage("kids_wear", "Kids Wear", list);
 
   const pag = document.getElementById("kidsPagination");
   if(totalPages <= 1){

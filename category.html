@@ -50,7 +50,7 @@
   </div>
 </div>
 
-<section class="cat-catalog">
+<section class="cat-catalog products-section">
   <div class="container">
     <div class="cat-grid" id="catGrid"></div>
     <div class="cat-empty" id="catEmpty" hidden>
@@ -85,8 +85,11 @@
 
 <div id="footer"></div>
 
+<script>window.dataLayer=window.dataLayer||[];</script>
+<script src="js/mcp-datalayer.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="js/styler-sitemap.js" defer></script>
 <script>
 const slug = new URLSearchParams(location.search).get("slug") || "crash-guards";
 const meta = CATEGORY_REGISTRY[slug];
@@ -172,10 +175,14 @@ function renderCatalog(){
     grid.innerHTML = "";
     empty.hidden = false;
     document.getElementById("catPagination").innerHTML = "";
+    if(typeof pushMcpCategoryPage === "function") pushMcpCategoryPage(slug, meta.title, list);
     return;
   }
   empty.hidden = true;
   grid.innerHTML = pageItems.map(collectionCard).join("");
+  if(typeof pushMcpCategoryPage === "function"){
+    pushMcpCategoryPage(slug, meta.title, list);
+  }
 
   const pag = document.getElementById("catPagination");
   if(totalPages <= 1){ pag.innerHTML = ""; return; }

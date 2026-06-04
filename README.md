@@ -32,5 +32,17 @@ netlify deploy --dir=. --prod
 
 or just drag the folder into Netlify Drop.
 
-## Brand
-TVS Motors — official TVS accessories, riding gear and merchandise store.
+## Analytics (Salesforce MCP / Styler)
+
+Load your **Salesforce Interactions (Evergage) SDK** before `js/styler-sitemap.js` on every page:
+
+```html
+<script>window.dataLayer=window.dataLayer||[];</script>
+<script src="js/mcp-datalayer.js"></script>
+<!-- YOUR_EVERGAGE_BEACON_SCRIPT_HERE -->
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/styler-sitemap.js" defer></script>
+```
+
+`js/mcp-datalayer.js` pushes `MCP` objects to `dataLayer` (Home, Category, Product, Cart, Checkout, Login, Contact, Purchase). `js/styler-sitemap.js` maps them to Salesforce page types and content zones.

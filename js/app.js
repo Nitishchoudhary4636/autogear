@@ -39,6 +39,7 @@ function loginWithEmail(email, password, remember=false){
   const user = findUserByEmail(email);
   if(!user || user.password !== password) return null;
   setSession({ name: user.name, email: user.email }, remember);
+  if(typeof pushMcpUserEvent === "function") pushMcpUserEvent(user.email, { firstName: user.name });
   return user;
 }
 
@@ -54,6 +55,7 @@ function registerWithEmail(name, email, password, opts={}){
   users.push(user);
   saveUsers(users);
   setSession({ name: user.name, email: user.email });
+  if(typeof pushMcpUserEvent === "function") pushMcpUserEvent(user.email, { firstName: user.name, marketingOptIn: !!opts.newsletter });
   return { ok: true, user };
 }
 
@@ -96,6 +98,7 @@ function saveCart(c){
   localStorage.setItem("ag_cart", JSON.stringify(c));
   updateBadges();
   renderCartDrawer();
+  if(typeof pushMcpCartPage === "function") pushMcpCartPage();
 }
 function getWish(){ return JSON.parse(localStorage.getItem("ag_wish") || "[]"); }
 function saveWish(w){ localStorage.setItem("ag_wish", JSON.stringify(w)); updateBadges(); }
@@ -171,6 +174,7 @@ function openCartDrawer(){
   document.getElementById("cartBackdrop").setAttribute("aria-hidden", "false");
   document.getElementById("cartDrawer").setAttribute("aria-hidden", "false");
   document.body.classList.add("ag-cart-open");
+  if(typeof pushMcpCartPage === "function") pushMcpCartPage();
 }
 
 function closeCartDrawer(){
@@ -363,6 +367,7 @@ function openCheckoutModal(step){
   document.getElementById("checkoutBackdrop").setAttribute("aria-hidden", "false");
   document.getElementById("checkoutModal").setAttribute("aria-hidden", "false");
   document.body.classList.add("ag-checkout-open");
+  if(typeof pushMcpCheckoutPage === "function") pushMcpCheckoutPage();
 }
 
 function closeCheckoutModal(){
@@ -620,6 +625,7 @@ function completeCheckoutOrder(draft, method){
   localStorage.removeItem("ag_checkout_draft");
   localStorage.removeItem("ag_cart_note");
   saveCart([]);
+  if(typeof pushMcpThankYouPage === "function") pushMcpThankYouPage(order);
   closeCheckoutModal();
   location.href = "thankyou.html";
 }
@@ -747,7 +753,7 @@ function buildHeader(active){
 
 function buildFooter(){
   return `
-  <footer class="site">
+  <footer class="site site-footer">
     <div class="container">
       <!-- Brand Section -->
       <div class="f-brand-section">
@@ -873,6 +879,7 @@ function mountChrome(active){
   initSiteHeader();
   initCartDrawer();
   initCheckoutModal();
+  if(typeof pushMcpPageFromPath === "function") pushMcpPageFromPath(active);
 }
 
 function initSiteHeader(){

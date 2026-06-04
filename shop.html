@@ -44,7 +44,7 @@
 </section>
 
 <!-- Top Sellers -->
-<section class="acc-section">
+<section class="acc-section featured-products">
   <div class="container">
     <div class="acc-section-head">
       <h2>Top Sellers</h2>
@@ -99,7 +99,7 @@
 </section>
 
 <!-- Full catalog -->
-<section class="acc-catalog" id="catalog">
+<section class="acc-catalog products-section" id="catalog">
   <div class="container">
     <div class="acc-catalog-head">
       <h2 id="catalogTitle">All Accessories</h2>
@@ -118,8 +118,11 @@
 
 <div id="footer"></div>
 
+<script>window.dataLayer=window.dataLayer||[];</script>
+<script src="js/mcp-datalayer.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="js/styler-sitemap.js" defer></script>
 <script>
 const params = new URLSearchParams(location.search);
 if(params.get("sort") === "sale"){
@@ -265,10 +268,20 @@ function renderCatalog(){
   if(!list.length){
     document.getElementById("catalogGrid").innerHTML = "";
     empty.classList.add("show");
+    if(typeof pushMcpCategoryPage === "function"){
+      pushMcpCategoryPage(state.cat || state.sort || "accessories_all", title.textContent, list);
+    }
     return;
   }
   empty.classList.remove("show");
   document.getElementById("catalogGrid").innerHTML = list.map(accessoryCard).join("");
+  if(typeof pushMcpCategoryPage === "function"){
+    pushMcpCategoryPage(
+      state.cat || state.sort || "accessories_all",
+      title.textContent,
+      list
+    );
+  }
 }
 
 document.getElementById("filterBar").addEventListener("click", e => {
