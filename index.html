@@ -271,33 +271,38 @@
 <script src="js/mcp-datalayer.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
-<script src="js/styler-sitemap.js" defer></script>
 <script>
 mountChrome("home");
 
-// Render categories
-document.getElementById("cats").innerHTML = CATEGORIES.map(c=>`
+const catsEl = document.getElementById("cats");
+if(catsEl){
+  catsEl.innerHTML = CATEGORIES.map(c=>`
   <a href="shop.html?cat=${c.name}" class="cat">
     <div class="ico">${c.icon}</div>
     <h3>${c.name}</h3><span>${c.count} products</span>
   </a>`).join("");
+}
 
-// Featured
-document.getElementById("featured").innerHTML = PRODUCTS.slice(0,4).map(productCard).join("");
-// Carousel
-document.getElementById("carTrack").innerHTML = PRODUCTS.slice().reverse().map(productCard).join("");
+const featuredEl = document.getElementById("featured");
+if(featuredEl) featuredEl.innerHTML = PRODUCTS.slice(0,4).map(productCard).join("");
+
+const carTrackEl = document.getElementById("carTrack");
+if(carTrackEl) carTrackEl.innerHTML = PRODUCTS.slice().reverse().map(productCard).join("");
 
 // Hero slider
 let slideIdx = 0;
 const slides = document.querySelectorAll(".slide");
 const dotsEl = document.getElementById("dots");
-slides.forEach((_,i)=>{
-  const d=document.createElement("div");
-  d.className="dot"+(i===0?" active":"");
-  d.onclick=()=>goSlide(i);
-  dotsEl.appendChild(d);
-});
+if(dotsEl && slides.length){
+  slides.forEach((_,i)=>{
+    const d=document.createElement("div");
+    d.className="dot"+(i===0?" active":"");
+    d.onclick=()=>goSlide(i);
+    dotsEl.appendChild(d);
+  });
+}
 function goSlide(i){
+  if(!slides.length || !dotsEl) return;
   slides[slideIdx].classList.remove("active");
   dotsEl.children[slideIdx].classList.remove("active");
   slideIdx=(i+slides.length)%slides.length;
@@ -306,12 +311,17 @@ function goSlide(i){
 }
 function slideNext(){goSlide(slideIdx+1)}
 function slidePrev(){goSlide(slideIdx-1)}
-let autoSlide = setInterval(slideNext,5500);
-document.querySelector(".hero").addEventListener("mouseenter",()=>clearInterval(autoSlide));
-document.querySelector(".hero").addEventListener("mouseleave",()=>autoSlide=setInterval(slideNext,5500));
+let autoSlide;
+const heroEl = document.querySelector(".hero");
+if(heroEl && slides.length){
+  autoSlide = setInterval(slideNext,5500);
+  heroEl.addEventListener("mouseenter",()=>clearInterval(autoSlide));
+  heroEl.addEventListener("mouseleave",()=>autoSlide=setInterval(slideNext,5500));
+}
 
 function carScroll(dir){
-  document.getElementById("carTrack").scrollBy({left:dir*320, behavior:"smooth"});
+  const track = document.getElementById("carTrack");
+  if(track) track.scrollBy({left:dir*320, behavior:"smooth"});
 }
 
 // Model carousel simple controls

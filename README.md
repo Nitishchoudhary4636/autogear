@@ -32,12 +32,23 @@ netlify deploy --dir=. --prod
 
 or just drag the folder into Netlify Drop.
 
-## Analytics (Salesforce MCP / Styler)
+## Analytics (Salesforce MCP / Evergage)
 
-Load the Evergage beacon in `<head>` on every page (already included in HTML):
+**Sitemap** Evergage CDN par configured hai (`evergage.min.js` ke through) — is repo mein sitemap file nahi hai.
+
+**DataLayer** site par `js/mcp-datalayer.js` se push hota hai; Evergage sitemap `MCP` keys read karti hai.
+
+Beacon har page ke `<head>` mein:
 
 ```html
 <script type="text/javascript" src="//cdn.evgnet.com/beacon/a556rq555550mxe43n3n3n091568480/tvs/scripts/evergage.min.js"></script>
 ```
 
-Then at end of body:
+Body ke end par:
+
+```html
+<script>window.dataLayer=window.dataLayer||[];</script>
+<script src="js/mcp-datalayer.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+```
