@@ -49,7 +49,7 @@ const SHOP_CATEGORIES = [
 ];
 
 const VEHICLE_MODELS = [
-  { id:"ronin", name:"TVS RONIN 2025 EDITION", img:"https://shop.tvsmotor.com/cdn/shop/files/Group_3_1.webp?v=1765733217" },
+  { id:"tvs-ronin-2025-edition", name:"TVS RONIN 2025 EDITION", img:"https://shop.tvsmotor.com/cdn/shop/files/Group_3_1.webp?v=1765733217" },
   { id:"apache310", name:"TVS APACHE RTR 310", img:"https://shop.tvsmotor.com/cdn/shop/files/TVS_Apache_RTR_310_290x_4c281f7c-9ac9-4cbb-b0ed-c12ebc2add55.png?v=1713157859" },
   { id:"rtx", name:"TVS APACHE RTX", img:"https://shop.tvsmotor.com/cdn/shop/files/XYZN59777.png?v=1760522534" },
   { id:"jupiter", name:"TVS JUPITER", img:"https://shop.tvsmotor.com/cdn/shop/files/Jupiter_290x_0040c3ea-3bd3-41c0-940d-72320b71b7fc.png?v=1765533487" },
