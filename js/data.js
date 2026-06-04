@@ -48,6 +48,21 @@ const SHOP_CATEGORIES = [
   { name:"Riding Gear", slug:"riding-gear", img:"images/p5.jpg", cat:"Interior" }
 ];
 
+/** Official TVS Motor media CDN (navbar / homepage product images) */
+const TVS_MOTOR_CDN = "https://www.tvsmotor.com";
+
+/** Genuine accessory images from shop.tvsmotor.com (by accessory type) */
+const TVS_ACCESSORY_IMAGES = {
+  "scooter-cover": "https://cdn.shopify.com/s/files/1/0757/0722/0250/files/1_adb84461-ecd4-4214-90e1-9eed6978ff0a.jpg?v=1761651133",
+  "floor-mat-set": "https://cdn.shopify.com/s/files/1/0757/0722/0250/products/P6300680.png?v=1691473403",
+  "led-headlight-bulbs": "https://cdn.shopify.com/s/files/1/0757/0722/0250/files/BCK00011_2_small.jpg?v=1696072195",
+  "mobile-charger": "https://cdn.shopify.com/s/files/1/0757/0722/0250/products/K6160930_2.png?v=1723459477",
+  "crash-guard-kit": "https://cdn.shopify.com/s/files/1/0757/0722/0250/files/K6210510_1_e551901c-ee1b-44e5-93eb-89146301fe6f.png?v=1707723072",
+  "seat-cover-pro": "https://cdn.shopify.com/s/files/1/0757/0722/0250/products/N6224227_1_279867ca-0d4c-4d74-8bdd-aaf746967d71.png?v=1691471234",
+  "dashcam-wifi": "https://cdn.shopify.com/s/files/1/0757/0722/0250/files/BCK00031_1_small.png?v=1696072408",
+  "top-box-mount-kit": "https://cdn.shopify.com/s/files/1/0757/0722/0250/files/1_bf5b4636-fe88-4c72-8107-aa260b7cb915.jpg?v=1694602412"
+};
+
 /** Same vehicle catalog as TVS Motor India homepage (ids, names, specs) */
 const TVS_VEHICLE_CATALOG = {
   currency: "INR",
@@ -67,33 +82,33 @@ const TVS_VEHICLE_CATALOG = {
       itemListId: "scooters",
       itemListName: "Scooters",
       items: [
-        { id: "tvs-ntorq-150", name: "TVS Ntorq 150", price: 111350, category: "scooters", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Ntorq_290x_c95eced3-bdfa-4f39-a667-e0624ac342ea.png?v=1712821438", engine: "149.7 cc", power: "13.1 PS", weight: "115 kg", availability: "InStock" },
-        { id: "tvs-ntorq-125", name: "TVS Ntorq 125", price: 81750, category: "scooters", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Ntorq_290x_c95eced3-bdfa-4f39-a667-e0624ac342ea.png?v=1712821438", engine: "124.8 cc", power: "10.2 PS", weight: "110 kgs", availability: "InStock" },
-        { id: "tvs-jupiter", name: "TVS Jupiter", price: 73550, category: "scooters", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Jupiter_290x_0040c3ea-3bd3-41c0-940d-72320b71b7fc.png?v=1765533487", engine: "113.3 cc", power: "8 PS", weight: "106 Kg", availability: "InStock" }
+        { id: "tvs-ntorq-150", name: "TVS Ntorq 150", price: 111350, category: "scooters", imageUrl: TVS_MOTOR_CDN + "/-/media/Feature/Navbar/New-Product-images/Ntorq-150.webp", engine: "149.7 cc", power: "13.1 PS", weight: "115 kg", availability: "InStock" },
+        { id: "tvs-ntorq-125", name: "TVS Ntorq 125", price: 81750, category: "scooters", imageUrl: TVS_MOTOR_CDN + "/-/media/Feature/Navbar/New-Product-images/15-05-25/Ntorq.webp", engine: "124.8 cc", power: "10.2 PS", weight: "110 kgs", availability: "InStock" },
+        { id: "tvs-jupiter", name: "TVS Jupiter", price: 73550, category: "scooters", imageUrl: TVS_MOTOR_CDN + "/-/media/Feature/Navbar/New-Product-images/15-05-25/Jupiter.webp", engine: "113.3 cc", power: "8 PS", weight: "106 Kg", availability: "InStock" }
       ]
     },
     electric: {
       itemListId: "electric",
       itemListName: "Electric",
       items: [
-        { id: "tvs-iqube", name: "TVS iQube", price: 84999, category: "electric", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Ntorq_290x_c95eced3-bdfa-4f39-a667-e0624ac342ea.png?v=1712821438", range: "212 km*", battery: "5.3 kWh", topSpeed: "82 km/h", availability: "InStock" },
-        { id: "tvs-x", name: "TVS X", price: 249990, category: "electric", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/XYZN59777.png?v=1760522534", range: "140 km*", battery: "3.8 kWh", topSpeed: "105 km/h", availability: "InStock" },
-        { id: "tvs-orbiter", name: "TVS Orbiter", price: 99900, category: "electric", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Jupiter_290x_0040c3ea-3bd3-41c0-940d-72320b71b7fc.png?v=1765533487", range: "158 km*", battery: "3.1 kWh", availability: "InStock" }
+        { id: "tvs-iqube", name: "TVS iQube", price: 84999, category: "electric", imageUrl: TVS_MOTOR_CDN + "/-/media/Feature/Navbar/New-Product-images/15-05-25/Tvs-iqube.webp", range: "212 km*", battery: "5.3 kWh", topSpeed: "82 km/h", availability: "InStock" },
+        { id: "tvs-x", name: "TVS X", price: 249990, category: "electric", imageUrl: TVS_MOTOR_CDN + "/-/media/Feature/Navbar/New-Product-images/15-05-25/TVS-X.webp", range: "140 km*", battery: "3.8 kWh", topSpeed: "105 km/h", availability: "InStock" },
+        { id: "tvs-orbiter", name: "TVS Orbiter", price: 99900, category: "electric", imageUrl: TVS_MOTOR_CDN + "/-/media/HomeOptimizedImages/TVS-Home-Page-WebP/Desktop/Vehicles/EV/TVS-Orbiter.webp", range: "158 km*", battery: "3.1 kWh", availability: "InStock" }
       ]
     },
     mopeds: {
       itemListId: "mopeds",
       itemListName: "Mopeds",
       items: [
-        { id: "tvs-xl100", name: "TVS XL100", price: 46850, category: "mopeds", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Raider_290x_67ebbbf2-cc21-463f-af6f-fbef99266de9.png?v=1712816619", engine: "99.7 cc", power: "4.3 PS", weight: "88 kgs", availability: "InStock" }
+        { id: "tvs-xl100", name: "TVS XL100", price: 46850, category: "mopeds", imageUrl: TVS_MOTOR_CDN + "/-/media/Feature/Navbar/New-Product-images/15-05-25/TVS-xl100.webp", engine: "99.7 cc", power: "4.3 PS", weight: "88 kgs", availability: "InStock" }
       ]
     },
     threewheelers: {
       itemListId: "threewheelers",
       itemListName: "Three Wheelers",
       items: [
-        { id: "tvs-king-deluxe", name: "TVS King Deluxe", price: 0, category: "threewheelers", fuel: "CNG, Petrol, LPG", availability: "ContactDealer" },
-        { id: "tvs-king-ev-max", name: "TVS King EV Max", price: 0, category: "threewheelers", fuel: "Electric", availability: "ContactDealer" }
+        { id: "tvs-king-deluxe", name: "TVS King Deluxe", price: 0, category: "threewheelers", imageUrl: TVS_MOTOR_CDN + "/-/media/Feature/Navbar/New-Product-images/TVS-King-New.webp", fuel: "CNG, Petrol, LPG", availability: "ContactDealer" },
+        { id: "tvs-king-ev-max", name: "TVS King EV Max", price: 0, category: "threewheelers", imageUrl: TVS_MOTOR_CDN + "/-/media/Feature/Navbar/New-Product-images/15-05-25/TVS-KING-EV-MAX.webp", fuel: "Electric", availability: "ContactDealer" }
       ]
     }
   }
@@ -173,22 +188,22 @@ const MERCH_CATEGORIES = [
 ];
 
 const MERCH_PRODUCTS = [
-  { id:101, name:"TVS Helmet Interior Cleaner (110 ml) (Pack of 2)", category:"Helmets", merchCat:"helmets", price:2.20, old:2.76, img:"https://shop.tvsmotor.com/cdn/shop/files/Helmetmenu.jpg?v=1773136880", rating:4.6, reviews:14, soldOut:true,
+  { id:101, name:"TVS Helmet Interior Cleaner (110 ml) (Pack of 2)", category:"Helmets", merchCat:"helmets", price:2.20, old:2.76, img:"https://cdn.shopify.com/s/files/1/0757/0722/0250/files/Artboard_2_small.jpg?v=1774765850", rating:4.6, reviews:14, soldOut:true,
     desc:"Helmet interior cleaner spray for fresh and hygienic helmet lining. Pack of 2 x 110 ml.",
     specs:{Volume:"110 ml x 2",Type:"Spray Cleaner",Use:"Helmet Interior",Pack:"Pack of 2"}},
-  { id:102, name:"TVS Polo T Shirt With Collar (Black)", category:"Helmets", merchCat:"urban", price:1.69, old:2.11, img:"https://shop.tvsmotor.com/cdn/shop/files/Home_Page_Antimatter.png?v=1768369528", rating:4.5, reviews:8, selectSize:true,
+  { id:102, name:"TVS Polo T Shirt With Collar (Black)", category:"Helmets", merchCat:"urban", price:1.69, old:2.11, img:"https://cdn.shopify.com/s/files/1/0757/0722/0250/products/NF301250_1.png?v=1692266723", rating:4.5, reviews:8, selectSize:true,
     desc:"Premium cotton polo with TVS branding. Comfortable fit for everyday urban wear.",
     specs:{Material:"Cotton",Fit:"Regular",Color:"Black",Sizes:"S–XXL"}},
-  { id:103, name:"TVS Logo Cap With Flap (Black)", category:"Helmets", merchCat:"urban", price:0.36, old:0.42, img:"images/p6.jpg", rating:4.3, reviews:22, soldOut:true,
+  { id:103, name:"TVS Logo Cap With Flap (Black)", category:"Helmets", merchCat:"urban", price:0.36, old:0.42, img:"https://cdn.shopify.com/s/files/1/0757/0722/0250/files/3_7d9d1d7b-a7e3-4f52-8bad-fb38876c3d7c.jpg?v=1721733400", rating:4.3, reviews:22, soldOut:true,
     desc:"Adjustable cap with TVS logo and neck flap for sun protection.",
     specs:{Material:"Cotton Blend",Color:"Black",Closure:"Adjustable",Style:"Cap with Flap"}},
-  { id:104, name:"TVS Smart Polo With Zipper (Black)", category:"Helmets", merchCat:"urban", price:1.72, old:2.15, img:"https://shop.tvsmotor.com/cdn/shop/files/Home_Page_Antimatter.png?v=1768369528", rating:4.7, reviews:19,
+  { id:104, name:"TVS Smart Polo With Zipper (Black)", category:"Helmets", merchCat:"urban", price:1.72, old:2.15, img:"https://cdn.shopify.com/s/files/1/0757/0722/0250/products/NF303830_5.png?v=1692018001", rating:4.7, reviews:19,
     desc:"Smart polo with front zipper and TVS Racing inspired design.",
     specs:{Material:"Poly-Cotton",Color:"Black",Feature:"Front Zipper",Fit:"Slim"}},
-  { id:105, name:"ASTRIDE Jockstrap (Black)", category:"Helmets", merchCat:"riding", price:0.49, old:0.55, img:"images/p6.jpg", rating:4.2, reviews:6, soldOut:true, notify:true,
+  { id:105, name:"ASTRIDE Jockstrap (Black)", category:"Helmets", merchCat:"riding", price:0.49, old:0.55, img:"https://cdn.shopify.com/s/files/1/0757/0722/0250/files/1_7a97ad3c-971c-40f7-ad15-d4ce686a87b4.jpg?v=1739514820", rating:4.2, reviews:6, soldOut:true, notify:true,
     desc:"Performance jockstrap for riding comfort and support.",
     specs:{Material:"Elastic Blend",Color:"Black",Use:"Riding Gear",Fit:"Universal"}},
-  { id:106, name:"Men Cotton T Shirt (Black)", category:"Helmets", merchCat:"urban", price:0.84, img:"images/p1.jpg", rating:4.4, reviews:31,
+  { id:106, name:"Men Cotton T Shirt (Black)", category:"Helmets", merchCat:"urban", price:0.84, img:"https://cdn.shopify.com/s/files/1/0757/0722/0250/files/3_19623289-c31f-40df-8e5c-a1ae6a13f070.jpg?v=1775107141", rating:4.4, reviews:31,
     desc:"Classic crew neck cotton tee with subtle TVS branding.",
     specs:{Material:"100% Cotton",Color:"Black",Fit:"Regular",Care:"Machine Wash"}},
   { id:107, name:"TVS Racing Riding Jacket", category:"Helmets", merchCat:"riding", price:4.82, old:6.02, img:"https://shop.tvsmotor.com/cdn/shop/files/Silk_Route_Helmet_Desktop.png?v=1773137631", rating:4.8, reviews:45, tag:"BESTSELLER",
@@ -210,13 +225,20 @@ const HELMET_SEO_LINKS = [
 PRODUCTS.push(...MERCH_PRODUCTS);
 
 const KIDS_VARIANTS = [
-  { color:"Navy Blue", img:"https://shop.tvsmotor.com/cdn/shop/files/Home_Page_Antimatter.png?v=1768369528" },
-  { color:"White", img:"https://shop.tvsmotor.com/cdn/shop/files/Silk_Route_Helmet_Desktop.png?v=1773137631" },
-  { color:"Yellow", img:"https://shop.tvsmotor.com/cdn/shop/files/Helmetmenu.jpg?v=1773136880" },
-  { color:"Pink", img:"images/p6.jpg" }
+  { color:"Navy Blue" },
+  { color:"White" },
+  { color:"Yellow" },
+  { color:"Pink" }
 ];
 
+const KIDS_TYPE_IMAGES = {
+  cap: "https://cdn.shopify.com/s/files/1/0757/0722/0250/files/3_7d9d1d7b-a7e3-4f52-8bad-fb38876c3d7c.jpg?v=1721733400",
+  gaiter: "https://cdn.shopify.com/s/files/1/0757/0722/0250/files/2_9b150e9d-5a26-454d-a34f-9ce432acdf40.jpg?v=1721036048",
+  sleeve: "https://cdn.shopify.com/s/files/1/0757/0722/0250/files/2_947d25d3-f0e8-4e3e-9a6b-912187f535be.jpg?v=1721034657"
+};
+
 function buildKidsProducts(baseId, name, type, price, oldPrice, reviews){
+  const typeImg = KIDS_TYPE_IMAGES[type] || KIDS_TYPE_IMAGES.cap;
   return KIDS_VARIANTS.map((v, i) => ({
     id: baseId + i,
     name,
@@ -225,7 +247,7 @@ function buildKidsProducts(baseId, name, type, price, oldPrice, reviews){
     kidsType: type,
     price,
     old: oldPrice,
-    img: v.img,
+    img: typeImg,
     rating: reviews ? 5 : 4.8,
     reviews: reviews || 0,
     size: "One size",
@@ -244,16 +266,16 @@ const KIDS_PRODUCTS = [
 PRODUCTS.push(...KIDS_PRODUCTS);
 
 const PROTECTION_PRODUCTS = [
-  { id:301, name:"TVS JUPITER CRASH GUARD KIT", category:"Exterior", shopSlug:"crash-guards", price:89.99, old:109.99, img:"images/p2.jpg", rating:4.8, reviews:156, tag:"BESTSELLER",
+  { id:301, name:"TVS JUPITER CRASH GUARD KIT", category:"Exterior", shopSlug:"crash-guards", price:89.99, old:109.99, img:TVS_ACCESSORY_IMAGES["crash-guard-kit"], rating:4.8, reviews:156, tag:"BESTSELLER",
     desc:"Heavy-duty crash guard kit engineered for TVS Jupiter. Impact-resistant steel with anti-corrosion finish.",
     specs:{Material:"Steel Alloy",Fit:"TVS Jupiter",Finish:"Matte Black",Warranty:"1 Year"}},
-  { id:302, name:"TVS JUPITER FRONT GUARD", category:"Exterior", shopSlug:"crash-guards", price:54.99, old:64.99, img:"images/p2.jpg", rating:4.7, reviews:89,
+  { id:302, name:"TVS JUPITER FRONT GUARD", category:"Exterior", shopSlug:"crash-guards", price:54.99, old:64.99, img:"https://cdn.shopify.com/s/files/1/0757/0722/0250/files/KL221151_1.png?v=1707724869", rating:4.7, reviews:89,
     desc:"Front protection guard for daily commute safety and enhanced scooter aesthetics.",
     specs:{Material:"Steel",Fit:"TVS Jupiter",Type:"Front Guard",Color:"Black"}},
-  { id:303, name:"TVS NTORQ BODY COVER", category:"Exterior", shopSlug:"crash-guards", price:42.99, old:49.99, img:"images/p7.jpg", rating:4.5, reviews:67,
+  { id:303, name:"TVS NTORQ BODY COVER", category:"Exterior", shopSlug:"crash-guards", price:42.99, old:49.99, img:"https://cdn.shopify.com/s/files/1/0757/0722/0250/files/1_c28141d8-ca99-4d49-9804-a63f913f4c95.png?v=1763526700", rating:4.5, reviews:67,
     desc:"All-weather body cover with UV protection and water-resistant coating.",
     specs:{Material:"Polyester",Fit:"TVS NTORQ",Feature:"Water Resistant",Color:"Grey"}},
-  { id:304, name:"TVS RAIDER SEAT COVER PRO", category:"Interior", shopSlug:"seat-covers", price:34.99, old:44.99, img:"images/p1.jpg", rating:4.6, reviews:112,
+  { id:304, name:"TVS RAIDER SEAT COVER PRO", category:"Interior", shopSlug:"seat-covers", price:34.99, old:44.99, img:TVS_ACCESSORY_IMAGES["seat-cover-pro"], rating:4.6, reviews:112,
     desc:"Premium seat cover with anti-slip base and easy installation for TVS Raider.",
     specs:{Material:"Leatherette",Fit:"TVS Raider",Color:"Black",Warranty:"6 Months"}}
 ];
@@ -285,7 +307,7 @@ function buildModelAccessories(){
         category: t.category,
         price: t.price,
         old: t.old,
-        img: m.img || t.img,
+        img: TVS_ACCESSORY_IMAGES[t.slug] || m.img || t.img,
         tag: t.tag,
         rating: +(4.3 + ((id % 7) * 0.1)).toFixed(1),
         reviews: 15 + ((id * 13) % 180),
