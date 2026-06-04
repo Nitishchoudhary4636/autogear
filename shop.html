@@ -150,7 +150,7 @@ document.getElementById("shopCategories").innerHTML = SHOP_CATEGORIES.map(c => `
     <div class="acc-cat-bar"><span>${c.name}</span><span class="arrow">→</span></div>
   </a>`).join("");
 
-// Model carousel cards — click opens Shop By Model page
+// Model carousel — all catalog vehicles (same ids as TVS Motor homepage)
 document.getElementById("modelTrack").innerHTML = VEHICLE_MODELS.map(m => `
   <button type="button" class="acc-model-card" data-model="${m.id}" onclick="goToShopByModel('${m.id}')">
     <img src="${m.img}" alt="${m.name}">

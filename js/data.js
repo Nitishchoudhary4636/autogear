@@ -48,14 +48,116 @@ const SHOP_CATEGORIES = [
   { name:"Riding Gear", slug:"riding-gear", img:"images/p5.jpg", cat:"Interior" }
 ];
 
-const VEHICLE_MODELS = [
-  { id:"tvs-ronin-2025-edition", name:"TVS RONIN 2025 EDITION", img:"https://shop.tvsmotor.com/cdn/shop/files/Group_3_1.webp?v=1765733217" },
-  { id:"apache310", name:"TVS APACHE RTR 310", img:"https://shop.tvsmotor.com/cdn/shop/files/TVS_Apache_RTR_310_290x_4c281f7c-9ac9-4cbb-b0ed-c12ebc2add55.png?v=1713157859" },
-  { id:"rtx", name:"TVS APACHE RTX", img:"https://shop.tvsmotor.com/cdn/shop/files/XYZN59777.png?v=1760522534" },
-  { id:"jupiter", name:"TVS JUPITER", img:"https://shop.tvsmotor.com/cdn/shop/files/Jupiter_290x_0040c3ea-3bd3-41c0-940d-72320b71b7fc.png?v=1765533487" },
-  { id:"raider", name:"TVS RAIDER", img:"https://shop.tvsmotor.com/cdn/shop/files/Raider_290x_67ebbbf2-cc21-463f-af6f-fbef99266de9.png?v=1712816619" },
-  { id:"ntorq", name:"TVS NTORQ", img:"https://shop.tvsmotor.com/cdn/shop/files/Ntorq_290x_c95eced3-bdfa-4f39-a667-e0624ac342ea.png?v=1712821438" }
-];
+/** Same vehicle catalog as TVS Motor India homepage (ids, names, specs) */
+const TVS_VEHICLE_CATALOG = {
+  currency: "INR",
+  categories: {
+    motorcycles: {
+      itemListId: "motorcycles",
+      itemListName: "Motorcycles",
+      items: [
+        { id: "apache-rtx", name: "Apache RTX", price: 199000, category: "motorcycles", imageUrl: "https://www.tvsmotor.com/-/media/Feature/Navbar/New-Product-images/Apache-RTX-PLP.webp", engine: "299.1 cc", power: "36 PS", weight: "180 Kg", availability: "InStock" },
+        { id: "apache-rr-310", name: "Apache RR 310", price: 262240, category: "motorcycles", imageUrl: "https://www.tvsmotor.com/-/media/Feature/Navbar/New-Product-images/09-03-26/RR-310.webp", engine: "312.12 cc", power: "38 PS", weight: "174 kgs", availability: "InStock" },
+        { id: "apache-rtr-310", name: "Apache RTR 310", price: 225240, category: "motorcycles", imageUrl: "https://www.tvsmotor.com/-/media/Feature/Navbar/New-Product-images/09-03-26/RTR-310.webp", engine: "312.12 cc", power: "35.6 PS", weight: "169 kgs", availability: "InStock" },
+        { id: "tvs-ronin-2025-edition", name: "TVS Ronin 2025 Edition", price: 128690, category: "motorcycles", imageUrl: "https://www.tvsmotor.com/-/media/Feature/Navbar/New-Product-images/15-05-25/TVS-Ronin.webp", engine: "225.9 cc", power: "20.4 PS", weight: "160 kgs", availability: "InStock" },
+        { id: "tvs-raider", name: "TVS Raider", price: 82860, category: "motorcycles", imageUrl: "https://www.tvsmotor.com/-/media/Feature/Navbar/New-Product-images/15-05-25/TVS-Raider.webp", engine: "124.8 cc", power: "11.38 PS", weight: "123 kgs", availability: "InStock" }
+      ]
+    },
+    scooters: {
+      itemListId: "scooters",
+      itemListName: "Scooters",
+      items: [
+        { id: "tvs-ntorq-150", name: "TVS Ntorq 150", price: 111350, category: "scooters", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Ntorq_290x_c95eced3-bdfa-4f39-a667-e0624ac342ea.png?v=1712821438", engine: "149.7 cc", power: "13.1 PS", weight: "115 kg", availability: "InStock" },
+        { id: "tvs-ntorq-125", name: "TVS Ntorq 125", price: 81750, category: "scooters", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Ntorq_290x_c95eced3-bdfa-4f39-a667-e0624ac342ea.png?v=1712821438", engine: "124.8 cc", power: "10.2 PS", weight: "110 kgs", availability: "InStock" },
+        { id: "tvs-jupiter", name: "TVS Jupiter", price: 73550, category: "scooters", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Jupiter_290x_0040c3ea-3bd3-41c0-940d-72320b71b7fc.png?v=1765533487", engine: "113.3 cc", power: "8 PS", weight: "106 Kg", availability: "InStock" }
+      ]
+    },
+    electric: {
+      itemListId: "electric",
+      itemListName: "Electric",
+      items: [
+        { id: "tvs-iqube", name: "TVS iQube", price: 84999, category: "electric", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Ntorq_290x_c95eced3-bdfa-4f39-a667-e0624ac342ea.png?v=1712821438", range: "212 km*", battery: "5.3 kWh", topSpeed: "82 km/h", availability: "InStock" },
+        { id: "tvs-x", name: "TVS X", price: 249990, category: "electric", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/XYZN59777.png?v=1760522534", range: "140 km*", battery: "3.8 kWh", topSpeed: "105 km/h", availability: "InStock" },
+        { id: "tvs-orbiter", name: "TVS Orbiter", price: 99900, category: "electric", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Jupiter_290x_0040c3ea-3bd3-41c0-940d-72320b71b7fc.png?v=1765533487", range: "158 km*", battery: "3.1 kWh", availability: "InStock" }
+      ]
+    },
+    mopeds: {
+      itemListId: "mopeds",
+      itemListName: "Mopeds",
+      items: [
+        { id: "tvs-xl100", name: "TVS XL100", price: 46850, category: "mopeds", imageUrl: "https://shop.tvsmotor.com/cdn/shop/files/Raider_290x_67ebbbf2-cc21-463f-af6f-fbef99266de9.png?v=1712816619", engine: "99.7 cc", power: "4.3 PS", weight: "88 kgs", availability: "InStock" }
+      ]
+    },
+    threewheelers: {
+      itemListId: "threewheelers",
+      itemListName: "Three Wheelers",
+      items: [
+        { id: "tvs-king-deluxe", name: "TVS King Deluxe", price: 0, category: "threewheelers", fuel: "CNG, Petrol, LPG", availability: "ContactDealer" },
+        { id: "tvs-king-ev-max", name: "TVS King EV Max", price: 0, category: "threewheelers", fuel: "Electric", availability: "ContactDealer" }
+      ]
+    }
+  }
+};
+
+/** Legacy shop URLs → canonical catalog ids */
+const MODEL_ID_ALIASES = {
+  ronin: "tvs-ronin-2025-edition",
+  apache310: "apache-rtr-310",
+  rtx: "apache-rtx",
+  jupiter: "tvs-jupiter",
+  raider: "tvs-raider",
+  ntorq: "tvs-ntorq-125"
+};
+
+function buildVehicleModelsFromCatalog(){
+  const list = [];
+  Object.keys(TVS_VEHICLE_CATALOG.categories).forEach(catKey => {
+    const cat = TVS_VEHICLE_CATALOG.categories[catKey];
+    cat.items.forEach(v => {
+      list.push({
+        id: v.id,
+        pid: v.id,
+        name: v.name,
+        displayName: v.name.toUpperCase(),
+        vehicleCategory: v.category,
+        vehicleType: catKey,
+        price: v.price,
+        img: v.imageUrl || "",
+        engine: v.engine || "",
+        power: v.power || "",
+        weight: v.weight || "",
+        range: v.range || "",
+        battery: v.battery || "",
+        topSpeed: v.topSpeed || "",
+        fuel: v.fuel || "",
+        availability: v.availability || "InStock"
+      });
+    });
+  });
+  return list;
+}
+
+const VEHICLE_MODELS = buildVehicleModelsFromCatalog();
+
+function findCatalogVehicleById(pid){
+  if(!pid) return null;
+  const keys = Object.keys(TVS_VEHICLE_CATALOG.categories);
+  for(let k = 0; k < keys.length; k++){
+    const hit = TVS_VEHICLE_CATALOG.categories[keys[k]].items.find(i => i.id === pid);
+    if(hit) return hit;
+  }
+  return null;
+}
+
+function findCatalogVehicleByName(name){
+  if(!name) return null;
+  const keys = Object.keys(TVS_VEHICLE_CATALOG.categories);
+  for(let k = 0; k < keys.length; k++){
+    const hit = TVS_VEHICLE_CATALOG.categories[keys[k]].items.find(i => i.name === name);
+    if(hit) return hit;
+  }
+  return null;
+}
 
 const CUSTOMER_REVIEWS = [
   { name:"Arjun M.", rating:5, text:"Premium leather seat cover fits perfectly. Installation was easy and the finish looks factory-grade.", product:"Premium Leather Seat Cover Set" },
@@ -160,14 +262,14 @@ PRODUCTS.push(...PROTECTION_PRODUCTS);
 
 function buildModelAccessories(){
   const types = [
-    { name:"Scooter Cover", img:"images/p7.jpg", price:54.99, old:64.99, category:"Exterior" },
-    { name:"Floor Mat Set", img:"images/p8.jpg", price:79.99, old:99.99, category:"Interior" },
-    { name:"LED Headlight Bulbs Pair", img:"images/p3.jpg", price:49.99, old:69.99, category:"Lighting", tag:"-30%" },
-    { name:"Mobile Charger", img:"images/p4.jpg", price:32.99, old:39.99, category:"Electronics" },
-    { name:"Crash Guard Kit", img:"images/p2.jpg", price:89.99, old:109.99, category:"Exterior", tag:"BESTSELLER" },
-    { name:"Seat Cover Pro", img:"images/p1.jpg", price:34.99, old:44.99, category:"Interior" },
-    { name:"Dashcam WiFi", img:"images/p5.jpg", price:99.99, old:139.99, category:"Electronics", tag:"HOT" },
-    { name:"Top Box Mount Kit", img:"images/p7.jpg", price:120.00, old:149.00, category:"Exterior", tag:"NEW" }
+    { slug:"scooter-cover", name:"Scooter Cover", img:"images/p7.jpg", price:54.99, old:64.99, category:"Exterior" },
+    { slug:"floor-mat-set", name:"Floor Mat Set", img:"images/p8.jpg", price:79.99, old:99.99, category:"Interior" },
+    { slug:"led-headlight-bulbs", name:"LED Headlight Bulbs Pair", img:"images/p3.jpg", price:49.99, old:69.99, category:"Lighting", tag:"-30%" },
+    { slug:"mobile-charger", name:"Mobile Charger", img:"images/p4.jpg", price:32.99, old:39.99, category:"Electronics" },
+    { slug:"crash-guard-kit", name:"Crash Guard Kit", img:"images/p2.jpg", price:89.99, old:109.99, category:"Exterior", tag:"BESTSELLER" },
+    { slug:"seat-cover-pro", name:"Seat Cover Pro", img:"images/p1.jpg", price:34.99, old:44.99, category:"Interior" },
+    { slug:"dashcam-wifi", name:"Dashcam WiFi", img:"images/p5.jpg", price:99.99, old:139.99, category:"Electronics", tag:"HOT" },
+    { slug:"top-box-mount-kit", name:"Top Box Mount Kit", img:"images/p7.jpg", price:120.00, old:149.00, category:"Exterior", tag:"NEW" }
   ];
   let id = 401;
   const items = [];
@@ -175,17 +277,20 @@ function buildModelAccessories(){
     types.forEach(t => {
       items.push({
         id: id++,
-        name: `${m.name} ${t.name}`,
+        pid: m.pid,
+        vehiclePid: m.id,
         modelId: m.id,
+        accessorySlug: t.slug,
+        name: `${m.name} ${t.name}`,
         category: t.category,
         price: t.price,
         old: t.old,
-        img: t.img,
+        img: m.img || t.img,
         tag: t.tag,
         rating: +(4.3 + ((id % 7) * 0.1)).toFixed(1),
         reviews: 15 + ((id * 13) % 180),
         desc: `Genuine TVS ${t.name.toLowerCase()} designed for ${m.name}. Perfect fit guaranteed.`,
-        specs: { Fit: m.name, Type: t.name, Brand: "TVS Genuine Parts" }
+        specs: { Fit: m.name, Type: t.name, Brand: "TVS Genuine Parts", VehicleId: m.id }
       });
     });
   });

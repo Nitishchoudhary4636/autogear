@@ -28,6 +28,7 @@
       <p>Choose your vehicle from our wide selection to find the perfect match for your needs and performance.</p>
       <label class="model-select-label" for="vehicleSelect">SELECT YOUR VEHICLE</label>
       <select id="vehicleSelect" class="model-select"></select>
+      <p class="model-vehicle-specs" id="modelVehicleSpecs"></p>
     </div>
     <div class="model-select-visual">
       <img id="modelHeroImg" src="" alt="">
@@ -97,19 +98,47 @@ if(searchInput) searchInput.placeholder = "Search for collections";
 
 const PER_PAGE = 8;
 let currentModelId = getSelectedModelId();
+let currentVehicleType = "";
 const state = { sort: "bestselling", view: "grid", page: 1, cat: "" };
 
 const vehicleSelect = document.getElementById("vehicleSelect");
-vehicleSelect.innerHTML = VEHICLE_MODELS.map(m =>
-  `<option value="${m.id}">${m.name}</option>`).join("");
-vehicleSelect.value = currentModelId;
+const TYPE_LABELS = { motorcycles:"Motorcycles", scooters:"Scooters", electric:"Electric", mopeds:"Mopeds", threewheelers:"Three Wheelers" };
+
+function buildVehicleSelect(){
+  const groups = {};
+  VEHICLE_MODELS.forEach(m => {
+    const g = m.vehicleType || "other";
+    if(!groups[g]) groups[g] = [];
+    groups[g].push(m);
+  });
+  vehicleSelect.innerHTML = Object.keys(groups).map(type => {
+    const label = TYPE_LABELS[type] || type;
+    const opts = groups[type].map(m => `<option value="${m.id}">${m.name}</option>`).join("");
+    return `<optgroup label="${label}">${opts}</optgroup>`;
+  }).join("");
+  vehicleSelect.value = currentModelId;
+}
+
+buildVehicleSelect();
 setSelectedModelId(currentModelId);
+
+function formatVehicleSpecs(model){
+  if(model.engine) return `Engine ${model.engine} · Power ${model.power} · Weight ${model.weight}`;
+  if(model.range) return `Range ${model.range} · Battery ${model.battery}${model.topSpeed ? " · Top speed " + model.topSpeed : ""}`;
+  if(model.fuel) return model.fuel;
+  return "";
+}
 
 function updateHero(){
   const model = getVehicleModel(currentModelId);
   document.getElementById("modelHeroImg").src = model.img;
   document.getElementById("modelHeroImg").alt = model.name;
   document.title = model.name + " Accessories — TVS Motor Company";
+  const specEl = document.getElementById("modelVehicleSpecs");
+  if(specEl){
+    const priceTxt = model.price ? `Starting at ₹ ${Number(model.price).toLocaleString("en-IN")}` : "";
+    specEl.textContent = [priceTxt, formatVehicleSpecs(model)].filter(Boolean).join(" · ");
+  }
 }
 
 function getSortedProducts(){
@@ -131,6 +160,31 @@ function renderQuickTags(){
     <button type="button" class="model-tag ${!state.cat ? "active" : ""}" data-cat="">Accessories</button>
     <button type="button" class="model-tag model-tag-model active-style">${model.name.replace("TVS ", "")}</button>
     ${cats.map(c => `<button type="button" class="model-tag ${state.cat === c ? "active" : ""}" data-cat="${c}">${c}</button>`).join("")}`;
+}
+
+function pushModelMcpData(list){
+  const model = getVehicleModel(currentModelId);
+  if(typeof pushMcpCategoryPage === "function"){
+    pushMcpCategoryPage(currentModelId, model.name, list);
+  }
+  const catalogItem = typeof findCatalogVehicleById === "function" ? findCatalogVehicleById(currentModelId) : null;
+  if(typeof pushMcp === "function" && catalogItem){
+    pushMcp({
+      pageType: "Category",
+      itemListId: currentModelId,
+      itemListName: model.name,
+      pid: currentModelId,
+      vehicleCatalog: typeof TVS_VEHICLE_CATALOG !== "undefined" ? TVS_VEHICLE_CATALOG : null,
+      Item: {
+        id: catalogItem.id,
+        name: catalogItem.name,
+        price: catalogItem.price,
+        category: catalogItem.category,
+        imageUrl: catalogItem.imageUrl || model.img,
+        availability: catalogItem.availability
+      }
+    });
+  }
 }
 
 function renderPage(){
@@ -156,16 +210,12 @@ function renderPage(){
     document.getElementById("modelEmpty").hidden = false;
     document.getElementById("modelPagination").innerHTML = "";
     renderQuickTags();
-    if(typeof pushMcpCategoryPage === "function"){
-      pushMcpCategoryPage(currentModelId, getVehicleModel(currentModelId).name, list);
-    }
+    pushModelMcpData(list);
     return;
   }
   document.getElementById("modelEmpty").hidden = true;
   grid.innerHTML = pageItems.map(collectionCard).join("");
-  if(typeof pushMcpCategoryPage === "function"){
-    pushMcpCategoryPage(currentModelId, getVehicleModel(currentModelId).name, list);
-  }
+  pushModelMcpData(list);
 
   const pag = document.getElementById("modelPagination");
   if(totalPages <= 1){ pag.innerHTML = ""; }

@@ -67,24 +67,7 @@
       <div class="model-types"><button class="pill active">Motorcycle</button><button class="pill">Scooter</button><button class="pill">Moped</button></div>
     </div>
 
-    <div class="model-carousel" id="modelCarousel">
-      <div class="model-item">
-        <img src="https://shop.tvsmotor.com/cdn/shop/files/Group_3_1.webp?v=1765733217" alt="TVS RONIN 2025 EDITION">
-        <div class="model-caption">TVS RONIN 2025 EDITION</div>
-      </div>
-      <div class="model-item">
-        <img src="https://shop.tvsmotor.com/cdn/shop/files/TVS_Apache_RTR_310_290x_4c281f7c-9ac9-4cbb-b0ed-c12ebc2add55.png?v=1713157859" alt="TVS APACHE RTR 310">
-        <div class="model-caption">TVS APACHE RTR 310</div>
-      </div>
-      <div class="model-item">
-        <img src="https://shop.tvsmotor.com/cdn/shop/files/XYZN59777.png?v=1760522534" alt="TVS APACHE RTX">
-        <div class="model-caption">TVS APACHE RTX</div>
-      </div>
-      <div class="model-item">
-        <img src="https://shop.tvsmotor.com/cdn/shop/files/Jupiter_290x_0040c3ea-3bd3-41c0-940d-72320b71b7fc.png?v=1765533487" alt="TVS JUPITER">
-        <div class="model-caption">TVS JUPITER</div>
-      </div>
-    </div>
+    <div class="model-carousel" id="modelCarousel"></div>
   </div>
 </section>
 
@@ -324,12 +307,28 @@ function carScroll(dir){
   if(track) track.scrollBy({left:dir*320, behavior:"smooth"});
 }
 
-// Model carousel simple controls
-const modelTrack = document.getElementById('modelCarousel');
+// Model carousel — catalog ids match TVS Motor homepage
+const modelTrack = document.getElementById("modelCarousel");
+const HOME_MODEL_TYPES = { Motorcycle: ["motorcycles"], Scooter: ["scooters", "electric"], Moped: ["mopeds"] };
+function renderHomeModelCarousel(pillLabel){
+  if(!modelTrack || typeof VEHICLE_MODELS === "undefined") return;
+  const types = HOME_MODEL_TYPES[pillLabel] || HOME_MODEL_TYPES.Motorcycle;
+  const models = VEHICLE_MODELS.filter(m => types.includes(m.vehicleType));
+  modelTrack.innerHTML = models.map(m => `
+    <div class="model-item" role="button" tabindex="0" data-model="${m.id}" onclick="goToShopByModel('${m.id}')" style="cursor:pointer">
+      <img src="${m.img}" alt="${m.name}">
+      <div class="model-caption">${m.displayName || m.name.toUpperCase()}</div>
+    </div>`).join("");
+}
 if(modelTrack){
+  renderHomeModelCarousel("Motorcycle");
   let mPos = 0;
-  setInterval(()=>{ if(modelTrack.scrollWidth>modelTrack.clientWidth) modelTrack.scrollBy({left:220, behavior:'smooth'}); },4000);
-  document.querySelectorAll('.model-types .pill').forEach(p=>p.addEventListener('click',e=>{ document.querySelectorAll('.model-types .pill').forEach(x=>x.classList.remove('active')); e.currentTarget.classList.add('active'); }));
+  setInterval(()=>{ if(modelTrack.scrollWidth>modelTrack.clientWidth) modelTrack.scrollBy({left:220, behavior:"smooth"}); },4000);
+  document.querySelectorAll(".model-types .pill").forEach(p=>p.addEventListener("click",e=>{
+    document.querySelectorAll(".model-types .pill").forEach(x=>x.classList.remove("active"));
+    e.currentTarget.classList.add("active");
+    renderHomeModelCarousel(e.currentTarget.textContent.trim());
+  }));
 }
 
 // Newsletter simple handler (keeps page client-side)

@@ -975,32 +975,42 @@ function getCategoryProducts(slug){
   return base.filter(p => p.category === meta.filterCat);
 }
 
+function normalizeModelId(modelId){
+  if(!modelId) return "";
+  const key = String(modelId).trim().toLowerCase();
+  if(typeof MODEL_ID_ALIASES !== "undefined" && MODEL_ID_ALIASES[key]) return MODEL_ID_ALIASES[key];
+  return modelId;
+}
+
 function getVehicleModel(modelId){
   if(typeof VEHICLE_MODELS === "undefined") return null;
-  return VEHICLE_MODELS.find(m => m.id === modelId) || VEHICLE_MODELS[0];
+  const id = normalizeModelId(modelId);
+  return VEHICLE_MODELS.find(m => m.id === id) || VEHICLE_MODELS[0];
 }
 
 function getSelectedModelId(fallback){
   const fromUrl = new URLSearchParams(location.search).get("model");
-  if(fromUrl) return fromUrl;
+  if(fromUrl) return normalizeModelId(fromUrl);
   const stored = sessionStorage.getItem("ag_selected_model");
-  if(stored) return stored;
+  if(stored) return normalizeModelId(stored);
   return fallback || (typeof VEHICLE_MODELS !== "undefined" ? VEHICLE_MODELS[0].id : "");
 }
 
 function setSelectedModelId(modelId){
-  sessionStorage.setItem("ag_selected_model", modelId);
+  sessionStorage.setItem("ag_selected_model", normalizeModelId(modelId));
 }
 
 function goToShopByModel(modelId){
-  setSelectedModelId(modelId);
-  location.href = `shop-by-model.html?model=${encodeURIComponent(modelId)}`;
+  const id = normalizeModelId(modelId);
+  setSelectedModelId(id);
+  location.href = `shop-by-model.html?model=${encodeURIComponent(id)}`;
 }
 
 function getModelProducts(modelId){
   if(typeof MODEL_ACCESSORIES === "undefined") return [];
-  const list = MODEL_ACCESSORIES.filter(p => p.modelId === modelId);
-  const model = getVehicleModel(modelId);
+  const id = normalizeModelId(modelId);
+  const list = MODEL_ACCESSORIES.filter(p => p.modelId === id);
+  const model = getVehicleModel(id);
   if(!model) return list;
   const key = model.name.split(" ").pop().toLowerCase();
   const extras = PRODUCTS.filter(p =>
@@ -1024,7 +1034,7 @@ function collectionCard(p){
   const tag = p.tag ? `<span class="col-tag">${p.tag}</span>` : "";
   const mrpLine = p.old ? `<div class="col-mrp">MRP ${formatTVSPrice(mrpInr)} <span class="col-off">${off}% off</span></div>` : "";
   return `
-  <article class="col-card">
+  <article class="col-card" data-vehicle-pid="${p.vehiclePid || p.modelId || ""}" data-accessory-slug="${p.accessorySlug || ""}" data-product-id="${p.id}">
     <div class="col-card-media">
       ${tag}
       <button class="col-wish ${wish ? "active" : ""}" type="button" onclick="toggleWish(${p.id});this.classList.toggle('active')" aria-label="Wishlist">♥</button>

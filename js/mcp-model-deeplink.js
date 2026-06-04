@@ -18,8 +18,9 @@
 
   // ── Read URL params ──────────────────────────────────────────
   var params    = new URLSearchParams(window.location.search);
-  var modelParam = params.get('model');   // e.g. "raider"
-  var itemParam  = params.get('item');    // e.g. "BoxKit"  (optional)
+  var modelParam = params.get('model');
+  var itemParam  = params.get('item');
+  if (typeof normalizeModelId === 'function') modelParam = normalizeModelId(modelParam);
 
   // Nothing to do if no model param
   if (!modelParam) return;
@@ -70,14 +71,16 @@
       var targetCard = null;
 
       cards.forEach(function (card) {
-        // Check anchor href for item id
         var link = card.querySelector('a[href*="' + itemParam + '"]');
-        // Check product name text
+        var slug = card.getAttribute('data-accessory-slug');
+        var pid = card.getAttribute('data-product-id');
         var nameEl = card.querySelector('.col-card-body h3');
         var nameMatch = nameEl && nameEl.textContent.toLowerCase()
                           .indexOf(itemParam.toLowerCase()) > -1;
+        var slugMatch = slug && slug.toLowerCase() === itemParam.toLowerCase();
+        var idMatch = pid && String(pid) === String(itemParam);
 
-        if (link || nameMatch) {
+        if (link || nameMatch || slugMatch || idMatch) {
           targetCard = card;
         }
       });
